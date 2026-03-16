@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: signet-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    depends_on:
+      - db
+      - redis
+    command: zsh -c "php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000 --watch"
+
+  db:
+    image: postgres:18-alpine
+    container_name: signet-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:8-alpine
+    container_name: signet-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:
+  redis_data:
