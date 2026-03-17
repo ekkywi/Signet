@@ -23,4 +23,14 @@ class Workspace extends Model
     {
         return $this->hasMany(ApiKey::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function licenses()
+    {
+        return $this->hasMany(License::class);
+    }
 }

@@ -1,25 +1,28 @@
 <x-layouts.app title="API Keys - Signet">
 
     <div class="px-8 py-8 border-b border-gray-800/50 bg-[#0a0a0a]/50 sticky top-0 backdrop-blur-xl z-10">
+        <div class="max-w-7xl mx-auto w-full">
 
-        @if (session("success"))
-            <div class="mb-6 bg-teal-500/10 border border-teal-500/50 text-teal-400 px-6 py-4 rounded-xl flex items-center gap-3 shadow-lg shadow-teal-500/10 animate-fade-in-down">
-                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                </svg>
-                <span class="font-medium text-sm">{{ session("success") }}</span>
-            </div>
-        @endif
+            @if (session("success"))
+                <div class="mb-6 bg-teal-500/10 border border-teal-500/50 text-teal-400 px-6 py-4 rounded-xl flex items-center gap-3 shadow-lg shadow-teal-500/10 animate-fade-in-down">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span class="font-medium text-sm">{{ session("success") }}</span>
+                </div>
+            @endif
 
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="text-2xl font-bold text-white tracking-tight">API Keys</h2>
-                <p class="text-sm text-gray-500 mt-1">Manage secret tokens to authenticate your applications with Signet.</p>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">API Keys</h2>
+                    <p class="text-sm text-gray-500 mt-1">Manage secret tokens to authenticate your applications with Signet.</p>
+                </div>
             </div>
+
         </div>
     </div>
 
-    <div class="p-8 space-y-8 max-w-6xl">
+    <div class="p-8 space-y-8 max-w-7xl mx-auto w-full">
 
         <div class="bg-[#111] border border-gray-800 rounded-2xl p-6 relative overflow-hidden">
             <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl"></div>

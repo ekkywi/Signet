@@ -10,11 +10,14 @@ return new class extends Migration
     {
         Schema::create('licenses', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('product_id')->constrained()->cascadeOnDelete();
-            $table->string('serial_key')->unique();
+            $table->string('key')->unique();
             $table->string('status')->default('active');
-            $table->boolean('is_node_locked')->default(false);
-            $table->string('bound_machine_id')->nullable();
+            $table->boolean('require_hardware_lock')->default(true);
+            $table->string('hardware_id')->nullable();
+            $table->integer('activations_count')->default(0);
+            $table->integer('max_activations')->default(1);
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
