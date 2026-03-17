@@ -18,4 +18,9 @@ class Workspace extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
+    }
 }

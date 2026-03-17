@@ -38,7 +38,9 @@ class RegisterController extends Controller
             DB::commit();
 
             Auth::login($user);
-        } catch (\Exception $e) {
+
+            return redirect()->route('dashboard')->with('success', 'Welcome to Signet! Your workspace is ready.');
+        } catch (\Throwable $e) {
             DB::rollBack();
 
             return back()->withInput()->withErrors([

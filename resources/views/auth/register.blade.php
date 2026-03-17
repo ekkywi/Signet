@@ -39,22 +39,37 @@
                     <div>
                         <label class="block text-sm font-medium leading-6 text-gray-300" for="name">Developer Name</label>
                         <div class="mt-1">
-                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset ring-gray-800 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6 transition-all duration-300" id="name" name="name" placeholder="John Doe" required type="text">
+                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset @error("name") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="name" name="name" placeholder="John Doe" required type="text" value="{{ old("name") }}">
                         </div>
+                        @error("name")
+                            <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                </svg> {{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium leading-6 text-gray-300" for="email">Email address</label>
                         <div class="mt-1">
-                            <input autocomplete="email" class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset ring-gray-800 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6 transition-all duration-300" id="email" name="email" placeholder="john@example.com" required type="email">
+                            <input autocomplete="email" class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset @error("email") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="email" name="email" placeholder="john@example.com" required type="email" value="{{ old("email") }}">
                         </div>
+                        @error("email")
+                            <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                </svg> {{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium leading-6 text-gray-300" for="password">Password</label>
                         <div class="mt-1">
-                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset ring-gray-800 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6 transition-all duration-300" id="password" name="password" placeholder="••••••••" required type="password">
+                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset @error("password") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="password" name="password" placeholder="••••••••" required type="password">
                         </div>
+                        @error("password")
+                            <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                </svg> {{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>

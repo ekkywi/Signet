@@ -21,6 +21,9 @@ services:
     depends_on:
       - db
       - redis
+    # Enable when first build, disable later
+    # command: sleep infinity
+    # Enable after first build, disable before first build
     command: zsh -c "php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000 --watch"
 
   db:
