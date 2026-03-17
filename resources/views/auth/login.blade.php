@@ -47,7 +47,7 @@
                         <div class="flex items-center justify-between">
                             <label class="block text-sm font-medium leading-6 text-gray-300" for="password">Password</label>
                             <div class="text-sm">
-                                <a class="font-medium text-teal-500 hover:text-teal-400 transition-colors" href="#">Forgot password?</a>
+                                <a class="font-medium text-teal-500 hover:text-teal-400 transition-colors" href="/forgot-password">Forgot password?</a>
                             </div>
                         </div>
                         <div class="mt-2">
