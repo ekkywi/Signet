@@ -23,15 +23,23 @@
 
             <form action="{{ route("licenses.store") }}" class="space-y-6" method="POST">
                 @csrf
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-400 mb-2">Product</label>
-                        <select class="block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-white ring-1 ring-inset ring-gray-800 focus:ring-teal-500 transition-all" name="product_id" required>
-                            <option value="">Select a product</option>
-                            @foreach ($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="relative">
+                            <select class="appearance-none block w-full rounded-xl border-0 bg-[#0a0a0a] pl-4 pr-10 py-3 text-white ring-1 ring-inset ring-gray-800 focus:ring-teal-500 transition-all cursor-pointer" name="product_id" required>
+                                <option value="">Select a product</option>
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                @endforeach
+                            </select>
+
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
@@ -39,7 +47,13 @@
                         <input class="block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-white ring-1 ring-inset ring-gray-800 focus:ring-teal-500 transition-all" min="1" name="max_activations" required type="number" value="1">
                     </div>
 
-                    <div class="flex items-end pb-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Expiration Date (Optional)</label>
+                        <input class="block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-white ring-1 ring-inset ring-gray-800 focus:ring-teal-500 transition-all cursor-pointer" id="expires_at" name="expires_at" placeholder="Select expiration date..." type="text">
+                        <p class="text-xs text-gray-600 mt-1.5">Leave blank for a Lifetime license.</p>
+                    </div>
+
+                    <div class="flex items-center pt-2 md:pt-8">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input checked class="sr-only peer" name="require_hardware_lock" type="checkbox" value="1">
                             <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
@@ -64,6 +78,7 @@
                             <th class="px-6 py-4">License Key</th>
                             <th class="px-6 py-4">Product</th>
                             <th class="px-6 py-4">Security</th>
+                            <th class="px-6 py-4">Expires</th>
                             <th class="px-6 py-4">Usage</th>
                             <th class="px-6 py-4 text-right">Actions</th>
                         </tr>
@@ -90,7 +105,19 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-xs">{{ $license->activations_count }} / {{ $license->max_activations }} Devices</span>
+                                    @if ($license->expires_at)
+                                        <span class="text-xs text-gray-300">{{ $license->expires_at->format("d M Y") }}</span>
+                                    @else
+                                        <span class="text-[11px] font-bold tracking-wide text-teal-400 bg-teal-500/10 px-2.5 py-1 rounded-full">LIFETIME</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800/40 text-gray-300 hover:text-white hover:bg-teal-500/20 transition-all border border-gray-700/50 hover:border-teal-500/40 text-xs font-medium group" href="{{ route("licenses.show", $license->id) }}">
+                                        {{ $license->activations_count }} / {{ $license->max_activations }} Devices
+                                        <svg class="w-3.5 h-3.5 text-gray-500 group-hover:text-teal-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                        </svg>
+                                    </a>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <form action="{{ route("licenses.destroy", $license->id) }}" class="hidden" id="revoke-form-{{ $license->id }}" method="POST">
@@ -140,6 +167,24 @@
             </div>
         </div>
     </div>
+
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://npmcdn.com/flatpickr/dist/themes/dark.css" rel="stylesheet" type="text/css">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#expires_at", {
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "F j, Y",
+                allowInput: false,
+                disableMobile: "true"
+            });
+        });
+    </script>
 
     <script>
         let formIdToSubmit = null;

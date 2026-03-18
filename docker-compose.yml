@@ -8,11 +8,11 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www
-      # Disable /dev mount when on Production
+      # ---Disable /dev mount when on Production---
       - /dev:/dev
-    # Enable when on Development, Disable when on Production
+    # ---Enable when on Development, Disable when on Production---
     privileged: true
-    # Enable when on Production, Disable when on Development
+    # ---Enable when on Production, Disable when on Development---
     # devices:
     #   - "/dev/ttyUSB0:/dev/ttyUSB0"
     ports:
@@ -21,9 +21,11 @@ services:
     depends_on:
       - db
       - redis
-    # Enable when first build, disable later
+
+    # ---Enable when first build, disable later---
     # command: sleep infinity
-    # Enable after first build, disable before first build
+
+    # ---Enable after first build, disable before first build---
     command: zsh -c "php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000 --watch"
 
   db:

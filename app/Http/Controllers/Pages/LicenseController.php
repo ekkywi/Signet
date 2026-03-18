@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\License;
+use App\Models\LicenseActivation;
 
 class LicenseController extends Controller
 {
@@ -26,15 +27,17 @@ class LicenseController extends Controller
         $request->validate([
             'product_id' => ['required', 'exists:products,id'],
             'max_activations' => ['required', 'integer', 'min:1'],
+            'expires_at' => ['nullable', 'date', 'after:today'],
         ]);
 
         $workspace = Auth::user()->workspaces()->first();
 
         $key =
-            Str::upper(Str::random(4)) . '-' .
-            Str::upper(Str::random(4)) . '-' .
-            Str::upper(Str::random(4)) . '-' .
-            Str::upper(Str::random(4));
+            Str::upper(Str::random(5)) . '-' .
+            Str::upper(Str::random(5)) . '-' .
+            Str::upper(Str::random(5)) . '-' .
+            Str::upper(Str::random(5)) . '-' .
+            Str::upper(Str::random(5));
 
         $workspace->licenses()->create([
             'product_id' => $request->product_id,
@@ -42,6 +45,7 @@ class LicenseController extends Controller
             'status' => 'active',
             'require_hardware_lock' => $request->has('require_hardware_lock'),
             'max_activations' => $request->max_activations,
+            'expires_at' => $request->expires_at,
         ]);
 
         return back()->with('success', 'License key generated: ' . $key);
@@ -54,5 +58,33 @@ class LicenseController extends Controller
         $license->delete();
 
         return back()->with('success', 'License revoked and deleted.');
+    }
+
+    public function show($id)
+    {
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
+        $license = $workspace->licenses()
+            ->with(['product', 'activations' => function ($query) {
+                $query->latest('last_active_at');
+            }])
+            ->where('id', $id)
+            ->firstOrFail();
+
+        return view('pages.licenses.show', compact('user', 'workspace', 'license'));
+    }
+
+    public function revokeDevice($id)
+    {
+        $workspace = Auth::user()->workspaces()->first();
+        $activation = LicenseActivation::whereHas('license', function ($query) use ($workspace) {
+            $query->where('workspace_id', $workspace->id);
+        })->where('id', $id)->firstOrFail();
+
+        $license = $activation->license;
+        $activation->delete();
+        $license->decrement('activations_count');
+
+        return back()->with('success', 'Device has been successfully revoked. The activation slot is now free.');
     }
 }

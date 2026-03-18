@@ -35,4 +35,9 @@ class License extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function activations()
+    {
+        return $this->hasMany(LicenseActivation::class);
+    }
 }

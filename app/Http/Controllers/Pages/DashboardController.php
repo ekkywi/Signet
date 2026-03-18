@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\LicenseActivation;
 
 class DashboardController extends Controller
 {
@@ -12,15 +13,26 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
+        $totalProducts = $workspace->products()->count();
+        $totalLicenses = $workspace->licenses()->count();
+        $totalDevices = LicenseActivation::whereHas('license', function ($query) use ($workspace) {
+            $query->where('workspace_id', $workspace->id);
+        })->count();
+        $recentActivations = LicenseActivation::with(['license.product'])
+            ->whereHas('license', function ($query) use ($workspace) {
+                $query->where('workspace_id', $workspace->id);
+            })
+            ->latest('last_active_at')
+            ->take(5)
+            ->get();
 
-        $stats = [
-            'active_licenses' => 0,
-            'total_api_keys' => $workspace->apiKeys()->count(),
-            'revoked_licenses' => 0,
-        ];
-
-        $recentLicenses = [];
-
-        return view('pages.dashboard', compact('user', 'workspace', 'stats', 'recentLicenses'));
+        return view('pages.dashboard', compact(
+            'user',
+            'workspace',
+            'totalProducts',
+            'totalLicenses',
+            'totalDevices',
+            'recentActivations'
+        ));
     }
 }
