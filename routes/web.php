@@ -22,6 +22,10 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.request');
 
+Route::get('/help', function () {
+    return view('pages.public-docs');
+})->name('help.index');
+
 Route::middleware('auth')->group(function () {
 
     // Dashboard
@@ -43,4 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/licenses/{id}', [LicenseController::class, 'destroy'])->name('licenses.destroy');
     Route::get('/licenses/{id}', [LicenseController::class, 'show'])->name('licenses.show');
     Route::delete('/licenses/activations/{id}', [LicenseController::class, 'revokeDevice'])->name('licenses.revoke-device');
+
+    // API Documentation
+    Route::get('/docs', function () {
+        return view('pages.docs');
+    })->name('docs');
 });

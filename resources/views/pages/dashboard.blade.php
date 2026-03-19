@@ -9,6 +9,15 @@
 
     <div class="p-8 space-y-8 max-w-7xl mx-auto w-full">
 
+        @if (session("success"))
+            <div class="bg-teal-500/10 border border-teal-500/50 text-teal-400 px-6 py-4 rounded-xl flex items-center gap-3 shadow-lg shadow-teal-500/10 animate-fade-in-down">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-medium text-sm">{{ session("success") }}</span>
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-[#111] border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden group">
                 <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">

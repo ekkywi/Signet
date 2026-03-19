@@ -77,7 +77,7 @@
                         <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
                     </svg>
                 </a>
-                <a class="w-full sm:w-auto flex items-center justify-center px-10 py-4 text-lg font-semibold rounded-full text-gray-300 bg-[#0A0A0A] hover:bg-[#111] border border-gray-700/80 hover:border-gray-600 transition-all duration-300 active:scale-95" href="#docs">
+                <a class="w-full sm:w-auto flex items-center justify-center px-10 py-4 text-lg font-semibold rounded-full text-gray-300 bg-[#0A0A0A] hover:bg-[#111] border border-gray-700/80 hover:border-gray-600 transition-all duration-300 active:scale-95" href="{{ route("help.index") }}">
                     Explore API Docs
                 </a>
             </div>
