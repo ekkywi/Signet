@@ -46,11 +46,9 @@
             </a>
 
             <a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs("docs") ? "bg-teal-500/10 text-teal-400 border border-teal-500/20" : "text-gray-400 hover:text-white hover:bg-[#111] hover:border hover:border-gray-800 border border-transparent" }}" href="{{ route("docs") }}">
-
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-
                 <span class="font-medium text-sm">Developer API</span>
             </a>
         </nav>
@@ -58,7 +56,7 @@
 
     <div class="p-4 border-t border-gray-800">
         @if ($user)
-            <div class="flex items-center gap-3 px-3 py-2">
+            <div class="flex items-center gap-3 px-3 py-2 mb-2">
                 <div class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-xs font-bold text-white uppercase">
                     {{ substr($user->name, 0, 2) }}
                 </div>
@@ -68,7 +66,15 @@
                 </div>
             </div>
 
-            <form action="{{ route("logout") }}" class="mt-2" method="POST">
+            <a class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs("profile.edit") ? "bg-teal-500/10 text-teal-400" : "text-gray-400 hover:text-white hover:bg-white/5" }}" href="{{ route("profile.edit") }}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                Account Settings
+            </a>
+
+            <form action="{{ route("logout") }}" class="mt-1" method="POST">
                 @csrf
                 <button class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-500/10 text-xs font-medium transition-colors" type="submit">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

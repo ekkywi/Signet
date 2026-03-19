@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Pages\ApiKeyController;
 use App\Http\Controllers\Pages\ProductController;
 use App\Http\Controllers\Pages\LicenseController;
+use App\Http\Controllers\Pages\ProfileController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -52,4 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/docs', function () {
         return view('pages.docs');
     })->name('docs');
+
+    // Profile Management
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
