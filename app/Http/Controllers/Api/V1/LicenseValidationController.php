@@ -6,9 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\License;
 use App\Models\Product;
+use App\Services\HsmService;
 
 class LicenseValidationController extends Controller
 {
+    protected HsmService $hsm;
+
+    public function __construct(HsmService $hsm)
+    {
+        $this->hsm = $hsm;
+    }
+
     public function validateLicense(Request $request)
     {
         $request->validate([
@@ -84,6 +92,23 @@ class LicenseValidationController extends Controller
             $license->update(['activations_count' => $currentUsage + 1]);
         }
 
+        $payloadToSign = [
+            'license_key' => $license->key,
+            'hardware_id' => $clientIdentifier,
+            'product' => $product->slug,
+            'expires_at' => $license->expires_at ? $license->expires_at->toIso8601String() : 'lifetime',
+            'timestamp' => now()->timestamp
+        ];
+
+        $signature = $this->hsm->signPayload($payloadToSign);
+
+        if (!$signature) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal Security Error. Hardware Cryptographic Module is unreachable.'
+            ], 500);
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'License is valid and authenticated.',
@@ -91,7 +116,9 @@ class LicenseValidationController extends Controller
                 'product' => $product->name,
                 'type' => $license->require_hardware_lock ? 'node-locked' : 'floating',
                 'expires_at' => $license->expires_at ? $license->expires_at->toIso8601String() : 'lifetime',
-            ]
+                'signed_payload' => $payloadToSign
+            ],
+            'signature' => $signature
         ], 200);
     }
 

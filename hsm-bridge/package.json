@@ -1,0 +1,13 @@
+{
+    "name": "signet-hsm-bridge",
+    "version": "1.0.0",
+    "description": "Micro-daemon to bridge HTTP request to ESP32 Serial Port",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "serialport": "^12.0.0"
+    }
+}

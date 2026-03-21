@@ -8,25 +8,41 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www
-      # ---Disable /dev mount when on Production---
-      - /dev:/dev
-    # ---Enable when on Development, Disable when on Production---
-    privileged: true
-    # ---Enable when on Production, Disable when on Development---
-    # devices:
-    #   - "/dev/ttyUSB0:/dev/ttyUSB0"
+      # Laravel tidak perlu lagi akses hardware langsung
+      # - /dev:/dev
+
+    # privileged: true # <-- Bisa di-disable karena urusan USB sudah di-handle hsm
+
     ports:
       - "8888:8000"
       - "5173:5173"
     depends_on:
       - db
       - redis
+      - hsm # <-- Tambahkan ini agar Laravel menunggu HSM menyala dulu
 
     # ---Enable when first build, disable later---
     # command: sleep infinity
 
     # ---Enable after first build, disable before first build---
     command: zsh -c "php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000 --watch"
+
+  # ==========================================
+  # SERVICE: Node.js Micro HSM Bridge
+  # ==========================================
+  hsm:
+    build:
+      context: ./hsm-bridge
+      dockerfile: Dockerfile
+    container_name: signet-hsm
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    ports:
+      - "3000:3000"
+    environment:
+      - SERIAL_PORT=/dev/ttyUSB0
 
   db:
     image: postgres:18-alpine
