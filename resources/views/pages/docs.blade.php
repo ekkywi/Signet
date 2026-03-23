@@ -2,7 +2,7 @@
 
     <div class="px-8 py-8 border-b border-gray-800/50 bg-[#0a0a0a]/50 sticky top-0 backdrop-blur-xl z-20">
         <div class="max-w-7xl mx-auto w-full">
-            <h2 class="text-2xl font-bold text-white tracking-tight">Developer Documentation</h2>
+            <h2 class="text-2xl font-bold text-white tracking-tight">API Documentation</h2>
             <p class="text-sm text-gray-500 mt-1">Integrate Signet's licensing engine into your client applications.</p>
         </div>
     </div>
@@ -80,35 +80,101 @@
                     </p>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="space-y-3">
-                            <h4 class="text-sm font-semibold text-gray-300">Endpoint Structure</h4>
-                            <code class="block w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-sm font-mono text-gray-300">
-                                /api/v1/licenses/validate
-                            </code>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Endpoint Structure</h4>
+                                <code class="block w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-sm font-mono text-gray-300">
+                                    /api/v1/licenses/validate
+                                </code>
+                            </div>
 
-                            <h4 class="text-sm font-semibold text-gray-300 pt-3">Request Body (JSON)</h4>
-                            <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden relative group">
-                                <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>{
-  <span class="text-blue-400">"license_key"</span>: <span class="text-green-400">"ABCD-EFGH-IJKL-MNOP"</span>,
-  <span class="text-blue-400">"product_slug"</span>: <span class="text-green-400">"your-product-slug"</span>,
-  <span class="text-blue-400">"hardware_id"</span>: <span class="text-green-400">"MAC-ADDRESS-OR-UUID"</span>,
-  <span class="text-blue-400">"device_name"</span>: <span class="text-green-400">"DESKTOP-GAMING"</span> <span class="text-gray-600">// Optional</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Parameters</h4>
+                                <ul class="space-y-2 mb-4 bg-[#111] border border-gray-800 rounded-xl p-4">
+                                    <li class="text-sm text-gray-400"><code class="text-teal-400 font-mono text-xs">license_key</code> <span class="text-red-400 text-xs ml-1">(Required)</span><br><span class="text-xs text-gray-500">The license string input by the user.</span></li>
+                                    <li class="text-sm text-gray-400"><code class="text-teal-400 font-mono text-xs">product_slug</code> <span class="text-red-400 text-xs ml-1">(Required)</span><br><span class="text-xs text-gray-500">Your product's unique identifier.</span></li>
+                                    <li class="text-sm text-gray-400"><code class="text-teal-400 font-mono text-xs">hardware_id</code> <span class="text-red-400 text-xs ml-1">(Required)</span><br><span class="text-xs text-gray-500">Unique device fingerprint (MAC/UUID).</span></li>
+                                    <li class="text-sm text-gray-400"><code class="text-teal-400 font-mono text-xs">device_name</code> <span class="text-gray-500 text-xs ml-1">(Optional)</span><br><span class="text-xs text-gray-500">Human-readable name for the dashboard.</span></li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Request Body (JSON)</h4>
+                                <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden relative group">
+                                    <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>{
+  <span class="text-blue-400">"license_key"</span>: <span class="text-green-400">"BWEAL-E8VUG-GDYHY-ZFZBM-YZAFZ"</span>,
+  <span class="text-blue-400">"product_slug"</span>: <span class="text-green-400">"awesome-app-xVt91"</span>,
+  <span class="text-blue-400">"hardware_id"</span>: <span class="text-green-400">"00:1A:2B:3C:4D:5E"</span>,
+  <span class="text-blue-400">"device_name"</span>: <span class="text-green-400">"OFFICE-PC-1"</span>
 }</code></pre>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="space-y-3">
-                            <h4 class="text-sm font-semibold text-gray-300">Success Response (200 OK)</h4>
-                            <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden">
-                                <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>{
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Success Response (200 OK)</h4>
+                                <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden">
+                                    <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>{
   <span class="text-blue-400">"status"</span>: <span class="text-green-400">"success"</span>,
-  <span class="text-blue-400">"message"</span>: <span class="text-green-400">"License is valid."</span>,
+  <span class="text-blue-400">"message"</span>: <span class="text-green-400">"License is valid and cryptographically signed."</span>,
   <span class="text-blue-400">"data"</span>: {
     <span class="text-blue-400">"product"</span>: <span class="text-green-400">"Awesome App"</span>,
     <span class="text-blue-400">"type"</span>: <span class="text-green-400">"node-locked"</span>,
-    <span class="text-blue-400">"expires_at"</span>: <span class="text-green-400">"lifetime"</span>
-  }
+    <span class="text-blue-400">"expires_at"</span>: <span class="text-green-400">"2026-03-24T00:00:00+00:00"</span>,
+    <span class="text-blue-400">"signed_payload"</span>: {
+      <span class="text-blue-400">"license_key"</span>: <span class="text-green-400">"BWEAL-E8VUG-GDYHY-ZFZBM-YZAFZ"</span>,
+      <span class="text-blue-400">"hardware_id"</span>: <span class="text-green-400">"00:1A:2B:3C:4D:5E"</span>,
+      <span class="text-blue-400">"product"</span>: <span class="text-green-400">"awesome-app-xVt91"</span>,
+      <span class="text-blue-400">"expires_at"</span>: <span class="text-green-400">"2026-03-24T00:00:00+00:00"</span>,
+      <span class="text-blue-400">"timestamp"</span>: <span class="text-orange-400">1774273862</span>
+    }
+  },
+  <span class="text-blue-400">"signature"</span>: <span class="text-green-400">"MEUCID+kF1dSHlYQbyYR6GkoJG6NjHDPjETjrtCWX2K5dNQmAiEAh/QrWdffkP0JoqhwhIp+EhL62jMIaSkOwBi++OUSBAs="</span>
 }</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-teal-500/10 border border-teal-500/20 rounded-xl p-5">
+                                <div class="flex gap-3">
+                                    <svg class="w-5 h-5 text-teal-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg>
+                                    <div>
+                                        <h5 class="text-sm font-semibold text-teal-400 mb-1">Crucial Security Step: Verify the Signature</h5>
+                                        <p class="text-xs text-teal-300/80 leading-relaxed">
+                                            Do not just check for a <code class="font-mono bg-teal-900/50 px-1 rounded">200 OK</code> status. To prevent server-spoofing, your application must stringify the <code class="font-mono bg-teal-900/50 px-1 rounded">signed_payload</code> object and verify it against the Base64 <code class="font-mono bg-teal-900/50 px-1 rounded">signature</code> using Signet's ECDSA Public Key embedded in your app.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Common Error Responses</h4>
+                                <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden">
+                                    <table class="w-full text-left text-sm text-gray-400">
+                                        <thead class="bg-[#0a0a0a] border-b border-gray-800 text-xs text-gray-500">
+                                            <tr>
+                                                <th class="px-4 py-3">HTTP Status</th>
+                                                <th class="px-4 py-3">Cause / Message</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-800">
+                                            <tr>
+                                                <td class="px-4 py-3 font-mono text-red-400">403 Forbidden</td>
+                                                <td class="px-4 py-3 text-xs">Activation limit reached or license has expired/revoked.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-3 font-mono text-orange-400">404 Not Found</td>
+                                                <td class="px-4 py-3 text-xs">Invalid license key or product slug.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-3 font-mono text-orange-400">400 Bad Req</td>
+                                                <td class="px-4 py-3 text-xs">Missing <code class="font-mono text-[10px]">hardware_id</code> in payload.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -135,19 +201,19 @@
                             <h4 class="text-sm font-semibold text-gray-300 pt-3">Request Body (JSON)</h4>
                             <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden relative group">
                                 <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>{
-  <span class="text-blue-400">"license_key"</span>: <span class="text-green-400">"ABCD-EFGH-IJKL-MNOP"</span>,
-  <span class="text-blue-400">"product_slug"</span>: <span class="text-green-400">"your-product-slug"</span>,
-  <span class="text-blue-400">"hardware_id"</span>: <span class="text-green-400">"MAC-ADDRESS-OR-UUID"</span>
+  <span class="text-blue-400">"license_key"</span>: <span class="text-green-400">"BWEAL-E8VUG-GDYHY-ZFZBM-YZAFZ"</span>,
+  <span class="text-blue-400">"product_slug"</span>: <span class="text-green-400">"awesome-app-xVt91"</span>,
+  <span class="text-blue-400">"hardware_id"</span>: <span class="text-green-400">"00:1A:2B:3C:4D:5E"</span>
 }</code></pre>
                             </div>
                         </div>
 
                         <div class="space-y-3">
-                            <h4 class="text-sm font-semibold text-gray-300">Success Response (200 OK)</h4>
+                            <h4 class="text-sm font-semibold text-gray-300 pt-3">Success Response (200 OK)</h4>
                             <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden">
                                 <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>{
   <span class="text-blue-400">"status"</span>: <span class="text-green-400">"success"</span>,
-  <span class="text-blue-400">"message"</span>: <span class="text-green-400">"License successfully deactivated."</span>
+  <span class="text-blue-400">"message"</span>: <span class="text-green-400">"License successfully deactivated for this device. The slot is now free."</span>
 }</code></pre>
                             </div>
                         </div>

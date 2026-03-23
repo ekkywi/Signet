@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -13,7 +14,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
-        $products = $workspace->products()->latest()->get();
+        $products = Product::where('workspace_id', $workspace->id)->withCount('licenses')->get();
 
         return view('pages.products.index', compact('user', 'workspace', 'products'));
     }

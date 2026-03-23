@@ -49,7 +49,7 @@
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-medium text-sm">Developer API</span>
+                <span class="font-medium text-sm">API Documentation</span>
             </a>
         </nav>
     </div>

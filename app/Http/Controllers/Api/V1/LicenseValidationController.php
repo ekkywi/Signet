@@ -111,7 +111,7 @@ class LicenseValidationController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'License is valid and authenticated.',
+            'message' => 'License is valid and cryptographically signed.',
             'data' => [
                 'product' => $product->name,
                 'type' => $license->require_hardware_lock ? 'node-locked' : 'floating',

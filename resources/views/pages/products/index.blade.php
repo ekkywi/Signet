@@ -73,7 +73,9 @@
                                     <code class="text-teal-400 font-mono text-xs bg-[#0a0a0a] px-2 py-1 rounded border border-gray-800">{{ $product->slug }}</code>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gray-800 rounded-full">0</span>
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gray-800 rounded-full">
+                                        {{ $product->licenses_count }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <form action="{{ route("products.destroy", $product->id) }}" id="delete-form-{{ $product->id }}" method="POST">
