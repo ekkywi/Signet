@@ -164,8 +164,9 @@
 
                 <section class="scroll-mt-32" id="integration">
                     <h2 class="text-3xl font-bold text-white mb-6">Frictionless Developer Experience</h2>
+
                     <p class="text-gray-400 leading-relaxed mb-10">
-                        We despise complex SDKs and bloated dependencies. Signet operates purely on standard HTTP/JSON requests, ensuring compatibility with any programming language. Here is your path to total security:
+                        We despise complex integration processes. Signet operates via pure HTTP REST APIs, and we provide <strong>Official Drop-in SDKs</strong> (Python, C++, C#, etc.) to handle the heavy cryptographic lifting for you. Here is your path to total security:
                     </p>
 
                     <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-800 before:to-transparent">
@@ -197,8 +198,8 @@
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                             <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-teal-500/20 text-teal-400 font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">4</div>
                             <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-[#0A0A0A] border border-gray-800 hover:border-teal-900/50 hover:bg-[#111] transition-colors shadow-lg shadow-teal-900/10">
-                                <h4 class="text-white font-bold mb-1">Implement the Call</h4>
-                                <p class="text-sm text-gray-500 leading-relaxed">On app startup, capture the user's serial and hardware footprint. Send a single <code class="text-xs text-teal-400 bg-teal-500/10 px-1 rounded">POST /validate</code> request to Signet. If the response is <code class="text-xs font-mono text-green-400">200 OK</code>, unlock the software. It's that simple.</p>
+                                <h4 class="text-white font-bold mb-1">Verify and Unlock</h4>
+                                <p class="text-sm text-gray-500 leading-relaxed">Send a <code class="text-xs text-teal-400 bg-teal-500/10 px-1 rounded">POST /validate</code> request. Signet returns a Base64 signature. Use our <strong>Client SDK</strong> to mathematically verify the payload locally against your Public Key. If valid, unlock the software!</p>
                             </div>
                         </div>
 
@@ -252,8 +253,6 @@
             });
         });
     </script>
-</body>
-
 </body>
 
 </html>
