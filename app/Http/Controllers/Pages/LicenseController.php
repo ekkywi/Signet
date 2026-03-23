@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use App\Models\Product;
 use App\Models\License;
 use App\Models\LicenseActivation;
@@ -24,13 +25,16 @@ class LicenseController extends Controller
 
     public function store(Request $request)
     {
+        $workspace = Auth::user()->workspaces()->first();
+
         $request->validate([
-            'product_id' => ['required', 'exists:products,id'],
+            'product_id' => [
+                'required',
+                Rule::exists('products', 'id')->where('workspace_id', $workspace->id)
+            ],
             'max_activations' => ['required', 'integer', 'min:1'],
             'expires_at' => ['nullable', 'date', 'after:today'],
         ]);
-
-        $workspace = Auth::user()->workspaces()->first();
 
         $key =
             Str::upper(Str::random(5)) . '-' .

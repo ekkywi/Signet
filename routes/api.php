@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('v1')->group(function () {
-    Route::middleware([VerifyApiKey::class])->group(function () {
+    Route::middleware([VerifyApiKey::class, 'throttle:60,1'])->group(function () {
         Route::post('/licenses/validate', [LicenseValidationController::class, 'validateLicense']);
         Route::post('/licenses/deactivate', [LicenseValidationController::class, 'deactivateLicense']);
     });
