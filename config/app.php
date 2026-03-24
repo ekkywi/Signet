@@ -123,4 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'version' => env('APP_VERSION', '1.0.0'),
+    'debug' => (bool) env('APP_DEBUG', false),
+
 ];

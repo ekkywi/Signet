@@ -331,7 +331,12 @@
                         <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                     </svg>
                 </div>
-                <span class="text-gray-200 font-bold">&copy; {{ date("Y") }} Signet Console.</span>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-200 font-bold">&copy; {{ date("Y") }} Signet Console.</span>
+                    <span class="font-mono text-[10px] font-medium tracking-widest text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
+                        v{{ config("app.version", "1.0.0") }}
+                    </span>
+                </div>
             </div>
             <p class="text-sm text-gray-600">
                 Signet is an advanced software licensing product engineered by <a class="text-teal-600 hover:text-teal-500 font-medium" href="https://trezanix.com">Trezanix</a>.<br>

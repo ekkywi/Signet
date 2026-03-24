@@ -24,6 +24,13 @@
                         <p class="text-sm text-gray-500 mt-1">Manage active devices and configuration.</p>
                     </div>
                 </div>
+
+                <button class="flex items-center gap-2 bg-[#111] hover:bg-gray-800 border border-gray-800 text-gray-300 px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg" onclick="openEditModal()" type="button">
+                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    Extend License
+                </button>
             </div>
 
         </div>
@@ -168,7 +175,61 @@
         </div>
     </div>
 
+    <div class="fixed inset-0 z-[100] hidden flex items-center justify-center" id="edit-modal">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeEditModal()"></div>
+
+        <div class="relative bg-[#111] border border-gray-800 rounded-2xl p-6 w-full max-w-md shadow-2xl transform scale-95 opacity-0 transition-all duration-300" id="edit-modal-panel">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-10 h-10 rounded-full bg-teal-500/10 flex items-center justify-center flex-shrink-0 border border-teal-500/20">
+                    <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white tracking-tight">Extend License</h3>
+                </div>
+            </div>
+
+            <form action="{{ route("licenses.update", $license->id) }}" method="POST">
+                @csrf
+                @method("PUT")
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">New Expiration Date</label>
+                    <input class="block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-white ring-1 ring-inset ring-gray-800 focus:ring-teal-500 transition-all cursor-pointer" id="edit_expires_at" name="expires_at" placeholder="Select new date..." type="text" value="{{ $license->expires_at ? $license->expires_at->format("Y-m-d") : "" }}">
+                    <p class="text-xs text-gray-600 mt-2">Leave blank to make it a Lifetime license.</p>
+                </div>
+
+                <div class="flex items-center justify-end gap-3">
+                    <button class="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition-colors" onclick="closeEditModal()" type="button">
+                        Cancel
+                    </button>
+                    <button class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-600 hover:bg-teal-500 text-white shadow-lg shadow-teal-500/20 transition-all active:scale-95" type="submit">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://npmcdn.com/flatpickr/dist/themes/dark.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script>
+        // Inisialisasi Flatpickr
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#edit_expires_at", {
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "F j, Y",
+                allowInput: false,
+                disableMobile: "true"
+            });
+        });
+
+        // Kontrol Modal Revoke
         let formIdToSubmit = null;
         const rModal = document.getElementById('revoke-modal');
         const rPanel = document.getElementById('revoke-modal-panel');
@@ -194,6 +255,26 @@
             if (formIdToSubmit) {
                 document.getElementById(formIdToSubmit).submit();
             }
+        }
+
+        // Kontrol Modal Edit
+        const editModal = document.getElementById('edit-modal');
+        const editModalPanel = document.getElementById('edit-modal-panel');
+
+        function openEditModal() {
+            editModal.classList.remove('hidden');
+            setTimeout(() => {
+                editModalPanel.classList.remove('scale-95', 'opacity-0');
+                editModalPanel.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeEditModal() {
+            editModalPanel.classList.remove('scale-100', 'opacity-100');
+            editModalPanel.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                editModal.classList.add('hidden');
+            }, 300);
         }
     </script>
 </x-layouts.app>

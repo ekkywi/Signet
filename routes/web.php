@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/licenses/{id}', [LicenseController::class, 'destroy'])->name('licenses.destroy');
     Route::get('/licenses/{id}', [LicenseController::class, 'show'])->name('licenses.show');
     Route::delete('/licenses/activations/{id}', [LicenseController::class, 'revokeDevice'])->name('licenses.revoke-device');
+    Route::put('/licenses/{id}', [LicenseController::class, 'update'])->name('licenses.update');
 
     // API Documentation
     Route::get('/docs', function () {

@@ -91,4 +91,20 @@ class LicenseController extends Controller
 
         return back()->with('success', 'Device has been successfully revoked. The activation slot is now free.');
     }
+
+    public function update(Request $request, $id)
+    {
+        $workspace = Auth::user()->workspaces()->first();
+        $license = $workspace->licenses()->findOrFail($id);
+
+        $request->validate([
+            'expires_at' => ['nullable', 'date', 'after:today'],
+        ]);
+
+        $license->update([
+            'expires_at' => $request->expires_at,
+        ]);
+
+        return back()->with('success', 'License expiration data updated successfully.');
+    }
 }

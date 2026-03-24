@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\License;
 use App\Models\Product;
 use App\Services\HsmService;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 
 class LicenseValidationController extends Controller
 {
@@ -100,7 +102,16 @@ class LicenseValidationController extends Controller
             'timestamp' => now()->timestamp
         ];
 
-        $signature = $this->hsm->signPayload($payloadToSign);
+        try {
+            $signature = Cache::lock('hsm-usb-port', 10)->block(5, function () use ($payloadToSign) {
+                return $this->hsm->signPayload($payloadToSign);
+            });
+        } catch (LockTimeoutException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'System is currently under heavy load processing signatures. Please try again in a few seconds.'
+            ], 503);
+        }
 
         if (!$signature) {
             return response()->json([
