@@ -1,8 +1,8 @@
-<x-layouts.app title="API Documentation - Signet">
+<x-layouts.app title="Dev Documentation - Signet">
 
     <div class="px-8 py-8 border-b border-gray-800/50 bg-[#0a0a0a]/50 sticky top-0 backdrop-blur-xl z-20">
         <div class="max-w-7xl mx-auto w-full">
-            <h2 class="text-2xl font-bold text-white tracking-tight">API Documentation</h2>
+            <h2 class="text-2xl font-bold text-white tracking-tight">Developer Documentation</h2>
             <p class="text-sm text-gray-500 mt-1">Integrate Signet's licensing engine into your client applications.</p>
         </div>
     </div>
@@ -20,7 +20,16 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">API Endpoints</h4>
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Integrations</h4>
+                        <ul class="space-y-2">
+                            <li><a class="text-sm text-teal-500 font-medium hover:text-teal-400 transition-colors flex items-center gap-2" href="#python-sdk">
+                                    Python SDK
+                                    <span class="bg-teal-500/20 text-teal-400 text-[10px] px-1.5 py-0.5 rounded uppercase font-bold tracking-widest">Recommended</span>
+                                </a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Raw API Endpoints</h4>
                         <ul class="space-y-2">
                             <li><a class="text-sm text-gray-400 hover:text-teal-400 transition-colors" href="#validate-license">Validate License</a></li>
                             <li><a class="text-sm text-gray-400 hover:text-teal-400 transition-colors" href="#deactivate-license">Deactivate License</a></li>
@@ -70,13 +79,71 @@
 
                 <hr class="border-gray-800">
 
+                <section class="scroll-mt-40" id="python-sdk">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-teal-500/10 text-teal-400 px-2.5 py-1 rounded text-xs font-bold tracking-wide border border-teal-500/20">RECOMMENDED</span>
+                        <h3 class="text-xl font-bold text-white">Official Python SDK</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        If you are building a Python application, we highly recommend using our official SDK. It automatically handles hardware ID generation, HTTP requests, and the complex offline Zero-Trust ECDSA cryptographic verification.
+                    </p>
+
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">1. Installation</h4>
+                                <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden relative group">
+                                    <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>pip install git+https://github.com/trezanix/signet-python-sdk.git</code></pre>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">2. Quick Implementation</h4>
+                                <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden relative group">
+                                    <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code><span class="text-purple-400">from</span> signet <span class="text-purple-400">import</span> SignetClient
+
+<span class="text-gray-500"># 1. Initialize the client securely</span>
+client = SignetClient(
+    api_url=<span class="text-green-400">"https://your-domain.com"</span>,
+    api_key=<span class="text-green-400">"sgnt_live_your_api_key"</span>,
+    public_key_pem=<span class="text-green-400">"-----BEGIN PUBLIC KEY-----\n..."</span>
+)
+
+<span class="text-gray-500"># 2. Check local offline license first (Zero-Trust)</span>
+is_valid = client.verify_local_license(cert_path=<span class="text-green-400">"license.cert"</span>)
+
+<span class="text-purple-400">if not</span> is_valid:
+    <span class="text-gray-500"># 3. If offline fails, activate online</span>
+    result = client.activate_license(
+        license_key=<span class="text-green-400">"USER-SERIAL-KEY"</span>,
+        product_slug=<span class="text-green-400">"your-product-slug"</span>,
+        save_path=<span class="text-green-400">"license.cert"</span>
+    )
+    <span class="text-purple-400">if</span> result[<span class="text-green-400">"success"</span>]:
+        <span class="text-blue-400">print</span>(<span class="text-green-400">"Activated successfully!"</span>)</code></pre>
+                                </div>
+                                <div class="mt-4">
+                                    <a class="text-sm text-teal-400 hover:text-teal-300 transition-colors inline-flex items-center gap-1" href="https://github.com/trezanix/signet-python-sdk" target="_blank">
+                                        View full production-ready examples on GitHub
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-800">
+
                 <section class="scroll-mt-40" id="validate-license">
                     <div class="flex items-center gap-3 mb-4">
                         <span class="bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded text-xs font-bold tracking-wide border border-blue-500/20">POST</span>
-                        <h3 class="text-xl font-bold text-white">Validate License</h3>
+                        <h3 class="text-xl font-bold text-white">Raw API: Validate License</h3>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Verifies a license key, checks its expiration, and registers the client's hardware ID to consume an activation slot.
+                        Verifies a license key, checks its expiration, and registers the client's hardware ID to consume an activation slot. Use this only if you are building an integration in a language other than Python.
                     </p>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -185,7 +252,7 @@
                 <section class="scroll-mt-40" id="deactivate-license">
                     <div class="flex items-center gap-3 mb-4">
                         <span class="bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded text-xs font-bold tracking-wide border border-blue-500/20">POST</span>
-                        <h3 class="text-xl font-bold text-white">Deactivate / Revoke Device</h3>
+                        <h3 class="text-xl font-bold text-white">Raw API: Deactivate / Revoke Device</h3>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Releases an activation slot by removing the specific hardware ID from the license. Useful when a user uninstalls the app or moves to a new computer.

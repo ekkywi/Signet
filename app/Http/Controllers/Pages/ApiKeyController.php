@@ -15,7 +15,10 @@ class ApiKeyController extends Controller
         $workspace = $user->workspaces()->first();
         $apiKeys = $workspace->apiKeys()->latest()->get();
 
-        return view('pages.apikeys.index', compact('user', 'workspace', 'apiKeys'));
+        $rawPublicKey = env('HSM_PUBLIC_KEY', "Public Key not configured in server environment.");
+        $publicKey = str_replace('\n', "\n", $rawPublicKey);
+
+        return view('pages.apikeys.index', compact('user', 'workspace', 'apiKeys', 'publicKey'));
     }
 
     public function store(Request $request)

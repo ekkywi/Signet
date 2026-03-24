@@ -42,14 +42,14 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                API Keys
+                API & Credentials
             </a>
 
             <a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs("docs") ? "bg-teal-500/10 text-teal-400 border border-teal-500/20" : "text-gray-400 hover:text-white hover:bg-[#111] hover:border hover:border-gray-800 border border-transparent" }}" href="{{ route("docs") }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-medium text-sm">API Documentation</span>
+                <span class="font-medium text-sm">Dev Documentation</span>
             </a>
         </nav>
     </div>

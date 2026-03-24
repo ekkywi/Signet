@@ -217,7 +217,6 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-        // Inisialisasi Flatpickr
         document.addEventListener('DOMContentLoaded', function() {
             flatpickr("#edit_expires_at", {
                 minDate: "today",
@@ -229,7 +228,6 @@
             });
         });
 
-        // Kontrol Modal Revoke
         let formIdToSubmit = null;
         const rModal = document.getElementById('revoke-modal');
         const rPanel = document.getElementById('revoke-modal-panel');
@@ -257,7 +255,6 @@
             }
         }
 
-        // Kontrol Modal Edit
         const editModal = document.getElementById('edit-modal');
         const editModalPanel = document.getElementById('edit-modal-panel');
 
