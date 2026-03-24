@@ -31,9 +31,10 @@
                     <span class="font-bold text-2xl tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all duration-300">Signet</span>
                 </a>
 
-                <div class="hidden md:flex items-center space-x-10">
-                    <a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#features">Platform</a>
-                    <a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#hsm">API Flow</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#features">Features</a>
+                    <a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#crypto">Micro HSM</a>
+                    <a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#platforms">Supported SDKs</a>
                     <a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#faq">FAQ</a>
                 </div>
 
@@ -186,7 +187,7 @@
         </div>
     </section>
 
-    <section class="relative py-24 sm:py-32 overflow-hidden border-t border-gray-800/80 bg-[#060606]" id="hsm">
+    <section class="relative py-24 sm:py-32 overflow-hidden border-t border-gray-800/80 bg-[#060606]" id="flow">
         <div class="absolute bottom-0 right-0 w-[500px] h-[300px] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -243,18 +244,100 @@
         </div>
     </section>
 
-    <section class="py-12 border-t border-gray-800/80 bg-[#040404] overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center mb-6">
-            <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest">Platform Agnostic. Integrates via pure HTTP REST API or our Official Drop-in SDKs.</p>
-        </div>
-        <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 max-w-4xl mx-auto px-6 opacity-80">
-            <span class="px-4 py-2 bg-[#111] border border-gray-800 rounded-lg text-sm text-gray-400 font-mono hover:text-teal-400 hover:border-teal-900 transition-colors">C++ / Qt</span>
-            <span class="px-4 py-2 bg-[#111] border border-gray-800 rounded-lg text-sm text-gray-400 font-mono hover:text-purple-400 hover:border-purple-900 transition-colors">Rust / Tauri</span>
-            <span class="px-4 py-2 bg-[#111] border border-gray-800 rounded-lg text-sm text-gray-400 font-mono hover:text-orange-400 hover:border-orange-900 transition-colors">C# / .NET</span>
-            <span class="px-4 py-2 bg-[#111] border border-gray-800 rounded-lg text-sm text-gray-400 font-mono hover:text-blue-400 hover:border-blue-900 transition-colors">Electron / Node.js</span>
-            <span class="px-4 py-2 bg-[#111] border border-gray-800 rounded-lg text-sm text-gray-400 font-mono hover:text-yellow-400 hover:border-yellow-900 transition-colors">Python</span>
-            <span class="px-4 py-2 bg-[#111] border border-gray-800 rounded-lg text-sm text-gray-400 font-mono hover:text-cyan-400 hover:border-cyan-900 transition-colors">Go</span>
-            <span class="px-4 py-2 bg-[#111] border border-gray-800 rounded-lg text-sm text-gray-400 font-mono hover:text-red-400 hover:border-red-900 transition-colors">Java</span>
+    <section class="py-20 border-t border-gray-800/80 bg-[#040404] relative overflow-hidden" id="platforms">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-teal-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-10">
+                <h2 class="text-sm font-bold text-teal-500 uppercase tracking-widest mb-3">Platform Agnostic Ecosystem</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base">
+                    No matter where your software runs, Signet protects it. Integrate via our pure HTTP REST API or drop-in official SDKs for your specific environment.
+                </p>
+            </div>
+
+            <div class="flex justify-center items-center gap-6 mb-12">
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
+                    </span>
+                    <span class="text-xs font-medium text-gray-300 uppercase tracking-wider">Official SDK Available</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-gray-600"></span>
+                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">REST API Supported</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-[#0a0a0a] border border-gray-800/50 rounded-2xl p-6 hover:border-teal-500/30 transition-all duration-300 group">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20 group-hover:border-blue-500/40 transition-colors">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold tracking-tight">Desktop Apps</h3>
+                            <p class="text-xs text-gray-500">Node-locked & Offline Ready</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <a class="px-3 py-1.5 bg-teal-500/10 border border-teal-500/40 rounded-lg text-xs text-teal-300 font-mono hover:bg-teal-500/20 transition-all flex items-center gap-2 shadow-[0_0_10px_rgba(20,184,166,0.1)]" href="https://github.com/trezanix/signet-python-sdk" target="_blank">
+                            <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> Python SDK
+                        </a>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-blue-400 hover:border-blue-900 transition-colors">C++ / Qt</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-purple-400 hover:border-purple-900 transition-colors">C# / .NET</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-orange-400 hover:border-orange-900 transition-colors">Rust / Tauri</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-green-400 hover:border-green-900 transition-colors">Electron / Node</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-red-400 hover:border-red-900 transition-colors">Java</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0a0a0a] border border-gray-800/50 rounded-2xl p-6 hover:border-teal-500/30 transition-all duration-300 group">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover:border-purple-500/40 transition-colors">
+                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold tracking-tight">Web & Backend</h3>
+                            <p class="text-xs text-gray-500">Server-to-Server Validation</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <a class="px-3 py-1.5 bg-teal-500/10 border border-teal-500/40 rounded-lg text-xs text-teal-300 font-mono hover:bg-teal-500/20 transition-all flex items-center gap-2 shadow-[0_0_10px_rgba(20,184,166,0.1)]" href="https://github.com/trezanix/signet-python-sdk" target="_blank">
+                            <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> Python SDK
+                        </a>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-indigo-400 hover:border-indigo-900 transition-colors">PHP / Laravel</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-green-400 hover:border-green-900 transition-colors">Node.js</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-cyan-400 hover:border-cyan-900 transition-colors">Go</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-red-500 hover:border-red-900 transition-colors">Ruby</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0a0a0a] border border-gray-800/50 rounded-2xl p-6 hover:border-teal-500/30 transition-all duration-300 group">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-teal-500/10 flex items-center justify-center border border-teal-500/20 group-hover:border-teal-500/40 transition-colors">
+                            <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold tracking-tight">Mobile B2B</h3>
+                            <p class="text-xs text-gray-500">Device Tracking & Revocation</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-cyan-400 hover:border-cyan-900 transition-colors">Flutter</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-green-500 hover:border-green-900 transition-colors">Android / Kotlin</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-orange-500 hover:border-orange-900 transition-colors">Swift / iOS</span>
+                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-blue-400 hover:border-blue-900 transition-colors">React Native</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </section>
 
@@ -269,7 +352,7 @@
                 <div class="bg-[#0A0A0A] border border-gray-800 rounded-2xl p-6 sm:p-8 hover:border-gray-700 transition-colors">
                     <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
                         <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                         </svg>
                         Is it genuinely 100% free? What's the catch?
                     </h3>
@@ -280,8 +363,8 @@
 
                 <div class="bg-[#0A0A0A] border border-gray-800 rounded-2xl p-6 sm:p-8 hover:border-gray-700 transition-colors">
                     <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                         </svg>
                         What happens if the Signet API goes offline?
                     </h3>
@@ -292,8 +375,8 @@
 
                 <div class="bg-[#0A0A0A] border border-gray-800 rounded-2xl p-6 sm:p-8 hover:border-gray-700 transition-colors">
                     <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                         </svg>
                         How does Node-Locking prevent VM cloning?
                     </h3>
