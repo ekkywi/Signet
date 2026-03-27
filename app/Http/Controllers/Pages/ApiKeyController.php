@@ -11,14 +11,12 @@ class ApiKeyController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
         $apiKeys = $workspace->apiKeys()->latest()->get();
 
-        $rawPublicKey = env('HSM_PUBLIC_KEY', "Public Key not configured in server environment.");
-        $publicKey = str_replace('\n', "\n", $rawPublicKey);
-
-        return view('pages.apikeys.index', compact('user', 'workspace', 'apiKeys', 'publicKey'));
+        return view('pages.apikeys.index', compact('user', 'workspace', 'apiKeys'));
     }
 
     public function store(Request $request)
@@ -27,7 +25,9 @@ class ApiKeyController extends Controller
             'name' => ['required', 'string', 'max:50'],
         ]);
 
-        $workspace = Auth::user()->workspaces()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
         $token = 'sgnt_live_' . Str::random(40);
         $workspace->apiKeys()->create([
             'name' => $request->name,
@@ -39,7 +39,9 @@ class ApiKeyController extends Controller
 
     public function destroy($id)
     {
-        $workspace = Auth::user()->workspaces()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
         $apiKey = $workspace->apiKeys()->where('id', $id)->firstOrFail();
         $apiKey->delete();
 

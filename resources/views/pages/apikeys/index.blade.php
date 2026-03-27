@@ -31,35 +31,28 @@
             <div>
                 <h4 class="text-sm font-semibold text-blue-400 mb-1">Understanding Your Keys</h4>
                 <p class="text-sm text-blue-300/80 leading-relaxed">
-                    Your <strong>API Key</strong> is highly classified and should only be placed in secure <code class="bg-blue-900/50 px-1 rounded">.env</code> files.
-                    However, your <strong>ECDSA Public Key</strong> is safe to be distributed within your compiled client applications as it can only <em>verify</em> signatures, not create them.
+                    Your <strong>API Key</strong> is highly classified and should only be placed in secure <code class="bg-blue-900/50 px-1 rounded">.env</code> files on your server.
+                    To verify signatures in your client applications offline, you must use the specific <strong>Product Certificate (.cert)</strong> available in the Products menu.
                 </p>
             </div>
         </div>
 
-        <div class="bg-[#111] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
-            <div class="px-6 py-5 border-b border-gray-800 flex justify-between items-center">
-                <div>
-                    <h3 class="text-lg font-bold text-white">Cryptographic Public Key</h3>
-                    <p class="text-sm text-gray-500 mt-1">Used by your client SDK to verify hardware signatures offline.</p>
-                </div>
-                <span class="bg-teal-500/10 text-teal-400 border border-teal-500/20 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase">
-                    Secp256r1
-                </span>
+        <div class="bg-[#111] border border-gray-800 rounded-2xl p-6 relative overflow-hidden shadow-xl flex items-center justify-between gap-6">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl"></div>
+
+            <div class="relative z-10 flex-1">
+                <h3 class="text-lg font-bold text-white mb-1">Product Certificates (.cert)</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Public keys are no longer generated globally. To implement offline verification within your client SDK, please navigate to the <strong>Products</strong> menu and download the specific <code class="bg-gray-800 text-teal-400 px-1.5 py-0.5 rounded text-xs font-mono">.cert</code> file for each of your applications. This file acts as your application's cryptographic passport.
+                </p>
             </div>
-
-            <div class="p-6">
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">SIGNET_PUBLIC_KEY</label>
-                <div class="relative group">
-                    <textarea class="w-full bg-[#0a0a0a] border border-gray-700 text-teal-400 font-mono text-sm rounded-xl p-4 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 outline-none resize-none transition-all" id="publicKeyText" readonly rows="4">{{ $publicKey }}</textarea>
-
-                    <button class="absolute top-3 right-3 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-2 border border-gray-600" onclick="copyPublicKey(this)">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                        </svg>
-                        <span>Copy Key</span>
-                    </button>
-                </div>
+            <div class="relative z-10 flex-shrink-0 hidden md:block">
+                <a class="bg-gray-800 hover:bg-gray-700 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all border border-gray-700 whitespace-nowrap flex items-center gap-2 shadow-lg hover:border-gray-600 active:scale-95" href="{{ route("products.index") }}">
+                    Go to Products
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
             </div>
         </div>
 
@@ -109,8 +102,13 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="inline-flex items-center gap-2 bg-[#0a0a0a] border border-gray-800 rounded-lg px-3 py-1.5 group-hover:border-gray-700 transition-colors">
-                                        <code class="text-teal-400 font-mono text-xs tracking-wider">{{ $key->token }}</code>
+                                    <div class="relative group inline-block">
+                                        <div class="inline-flex items-center gap-2 bg-[#0a0a0a] border border-gray-800 rounded-lg px-3 py-1.5 group-hover:border-teal-500/50 transition-colors cursor-pointer" onclick="copyApiKey('{{ $key->token }}', this)">
+                                            <code class="text-teal-400 font-mono text-xs tracking-wider">{{ $key->token }}</code>
+                                            <svg class="w-3.5 h-3.5 text-gray-600 group-hover:text-teal-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                            </svg>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-gray-500">
@@ -179,20 +177,18 @@
     </div>
 
     <script>
-        function copyPublicKey(btn) {
-            const textArea = document.getElementById('publicKeyText');
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-
-            navigator.clipboard.writeText(textArea.value).then(() => {
-                const originalText = btn.innerHTML;
-                btn.innerHTML = `<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span class="text-green-400">Copied!</span>`;
-                btn.classList.add('border-green-500/50', 'bg-green-500/10');
+        function copyApiKey(token, element) {
+            navigator.clipboard.writeText(token).then(() => {
+                const originalContent = element.innerHTML;
+                element.innerHTML = `<code class="text-green-400 font-mono text-xs tracking-wider">Copied to clipboard!</code>`;
+                element.classList.remove('border-gray-800');
+                element.classList.add('border-green-500/50', 'bg-green-500/10');
 
                 setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.classList.remove('border-green-500/50', 'bg-green-500/10');
-                }, 2000);
+                    element.innerHTML = originalContent;
+                    element.classList.remove('border-green-500/50', 'bg-green-500/10');
+                    element.classList.add('border-gray-800');
+                }, 1500);
             });
         }
 

@@ -15,6 +15,7 @@ class LicenseController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
         $products = $workspace->products()->orderBy('name')->get();
@@ -25,7 +26,9 @@ class LicenseController extends Controller
 
     public function store(Request $request)
     {
-        $workspace = Auth::user()->workspaces()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
 
         $request->validate([
             'product_id' => [
@@ -57,7 +60,9 @@ class LicenseController extends Controller
 
     public function destroy($id)
     {
-        $workspace = Auth::user()->workspaces()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
         $license = $workspace->licenses()->where('id', $id)->firstOrFail();
         $license->delete();
 
@@ -66,6 +71,7 @@ class LicenseController extends Controller
 
     public function show($id)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
         $license = $workspace->licenses()
@@ -80,7 +86,9 @@ class LicenseController extends Controller
 
     public function revokeDevice($id)
     {
-        $workspace = Auth::user()->workspaces()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
         $activation = LicenseActivation::whereHas('license', function ($query) use ($workspace) {
             $query->where('workspace_id', $workspace->id);
         })->where('id', $id)->firstOrFail();
@@ -94,7 +102,9 @@ class LicenseController extends Controller
 
     public function update(Request $request, $id)
     {
-        $workspace = Auth::user()->workspaces()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
         $license = $workspace->licenses()->findOrFail($id);
 
         $request->validate([

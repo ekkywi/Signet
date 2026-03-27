@@ -20,11 +20,15 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Integrations</h4>
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Official SDKs</h4>
                         <ul class="space-y-2">
                             <li><a class="text-sm text-teal-500 font-medium hover:text-teal-400 transition-colors flex items-center gap-2" href="#python-sdk">
                                     Python SDK
                                     <span class="bg-teal-500/20 text-teal-400 text-[10px] px-1.5 py-0.5 rounded uppercase font-bold tracking-widest">Recommended</span>
+                                </a></li>
+                            <li><a class="text-sm text-indigo-400 font-medium hover:text-indigo-300 transition-colors flex items-center gap-2" href="#php-sdk">
+                                    PHP SDK (New)
+                                    <span class="bg-indigo-500/20 text-indigo-400 text-[10px] px-1.5 py-0.5 rounded uppercase font-bold tracking-widest">Latest</span>
                                 </a></li>
                         </ul>
                     </div>
@@ -137,13 +141,74 @@ is_valid = client.verify_local_license(cert_path=<span class="text-green-400">"l
 
                 <hr class="border-gray-800">
 
+                <section class="scroll-mt-40" id="php-sdk">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-indigo-500/10 text-indigo-400 px-2.5 py-1 rounded text-xs font-bold tracking-wide border border-indigo-500/20">LATEST</span>
+                        <h3 class="text-xl font-bold text-white">Official PHP SDK</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Perfect for licensing Laravel applications, WordPress plugins, or any PSR-4 compliant PHP project. It utilizes PHP's native OpenSSL extension for blazing-fast Zero-Trust verification.
+                    </p>
+
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">1. Installation via Composer</h4>
+                                <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden relative group">
+                                    <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code>composer require trezanix/signet-php</code></pre>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">2. Implementation Example</h4>
+                                <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden relative group">
+                                    <pre class="p-4 text-sm font-mono text-gray-400 overflow-x-auto"><code><span class="text-purple-400">use</span> Trezanix\Signet\SignetClient;
+<span class="text-purple-400">use</span> Trezanix\Signet\Utils\HardwareId;
+
+<span class="text-gray-500">// 1. Initialize securely from your framework's .env</span>
+$client = <span class="text-purple-400">new</span> SignetClient(
+    <span class="text-blue-400">env</span>(<span class="text-green-400">'SIGNET_API_URL'</span>),
+    <span class="text-blue-400">env</span>(<span class="text-green-400">'SIGNET_API_KEY'</span>),
+    <span class="text-blue-400">str_replace</span>(<span class="text-green-400">'\n'</span>, <span class="text-green-400">"\n"</span>, <span class="text-blue-400">env</span>(<span class="text-green-400">'SIGNET_PUBLIC_KEY'</span>))
+);
+
+<span class="text-gray-500">// 2. Generate immutable server fingerprint</span>
+$hardwareId = HardwareId::<span class="text-blue-400">getServerFingerprint</span>();
+$certPath = <span class="text-blue-400">storage_path</span>(<span class="text-green-400">'license.cert'</span>);
+
+<span class="text-gray-500">// 3. Verify Offline First</span>
+<span class="text-purple-400">if</span> (!$client-><span class="text-blue-400">verifyLocalLicense</span>($certPath, $hardwareId)) {
+    <span class="text-gray-500">// 4. If invalid/expired, activate online</span>
+    $result = $client-><span class="text-blue-400">activateLicense</span>(
+        $userSerialKey, 
+        <span class="text-green-400">'product-slug'</span>, 
+        $hardwareId, 
+        $certPath
+    );
+}</code></pre>
+                                </div>
+                                <div class="mt-4">
+                                    <a class="text-sm text-indigo-400 hover:text-indigo-300 transition-colors inline-flex items-center gap-1" href="https://github.com/trezanix/signet-php-sdk" target="_blank">
+                                        View full documentation on GitHub
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-800">
+
                 <section class="scroll-mt-40" id="validate-license">
                     <div class="flex items-center gap-3 mb-4">
                         <span class="bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded text-xs font-bold tracking-wide border border-blue-500/20">POST</span>
                         <h3 class="text-xl font-bold text-white">Raw API: Validate License</h3>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Verifies a license key, checks its expiration, and registers the client's hardware ID to consume an activation slot. Use this only if you are building an integration in a language other than Python.
+                        Verifies a license key, checks its expiration, and registers the client's hardware ID to consume an activation slot. Use this only if you are building an integration in a language other than Python or PHP.
                     </p>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">

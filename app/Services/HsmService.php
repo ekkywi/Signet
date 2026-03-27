@@ -26,21 +26,25 @@ class HsmService
         }
     }
 
-    public function signPayload(array $payload): ?string
+    public function generateProductIdentity(array $payload): ?array
     {
         try {
-            $response = Http::timeout(5)->post("{$this->baseUrl}/api/hsm/sign", [
-                'data' => json_encode($payload)
+            $response = Http::timeout(10)->post("{$this->baseUrl}/api/hsm/generate-identity", [
+                'command' => 'GENERATE_IDENTITY',
+                'data' => $payload,
             ]);
 
             if ($response->successful() && $response->json('status') === 'success') {
-                return $response->json('signature');
+                return [
+                    'encrypted_private_key' => $response->json('data.encrypted_private_key'),
+                    'certificate' => $response->json('data.certificate'),
+                ];
             }
 
-            Log::error('[HSM SIGN ERROR] Failed to sign payload. Response: ' . $response->body());
+            Log::error('[HSM PKI ERROR] Failed to generate identity. Response: ' . $response->body());
             return null;
         } catch (Exception $e) {
-            Log::error('[HSM BRIDGE ERROR] Connection to Node.js bridge failed: ' . $e->getMessage());
+            Log::error('[HSM PKI ERROR] Connection to Node.js bridge failed: ' . $e->getMessage());
             return null;
         }
     }

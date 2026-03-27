@@ -12,7 +12,6 @@ class Workspace extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'api_key'
     ];
 
     public function user()
