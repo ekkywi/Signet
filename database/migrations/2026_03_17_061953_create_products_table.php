@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
+            $table->text('private_key')->nullable();
+            $table->text('certificate')->nullable();
             $table->timestamps();
         });
     }

@@ -15,6 +15,8 @@ class Product extends Model
         'name',
         'slug',
         'description',
+        'private_key',
+        'certificate',
     ];
 
     public function workspace()

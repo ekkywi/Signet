@@ -56,35 +56,44 @@
                 <table class="w-full text-left text-sm text-gray-400">
                     <thead class="bg-[#0a0a0a] border-b border-gray-800 text-xs uppercase font-medium text-gray-500 tracking-wider">
                         <tr>
-                            <th class="px-6 py-4">Product Name</th>
-                            <th class="px-6 py-4">Identifier (Slug)</th>
-                            <th class="px-6 py-4">Total Licenses</th>
-                            <th class="px-6 py-4 text-right">Actions</th>
+                            <th class="px-6 py-4 text-center">Product Name</th>
+                            <th class="px-6 py-4 text-center">Identifier (Slug)</th>
+                            <th class="px-6 py-4 text-center">Total Licenses</th>
+                            <th class="px-6 py-4 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-800">
                         @forelse ($products as $product)
                             <tr class="hover:bg-white/[0.02] transition-colors group">
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 text-center">
                                     <span class="font-medium text-white block">{{ $product->name }}</span>
                                     <span class="text-xs text-gray-500 mt-0.5 block truncate max-w-xs">{{ $product->description ?? "No description" }}</span>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 text-center">
                                     <code class="text-teal-400 font-mono text-xs bg-[#0a0a0a] px-2 py-1 rounded border border-gray-800">{{ $product->slug }}</code>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 text-center">
                                     <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gray-800 rounded-full">
                                         {{ $product->licenses_count }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <form action="{{ route("products.destroy", $product->id) }}" id="delete-form-{{ $product->id }}" method="POST">
-                                        @csrf
-                                        @method("DELETE")
-                                        <button class="text-gray-500 hover:text-red-500 font-medium text-xs transition-colors px-3 py-1.5 rounded hover:bg-red-500/10" onclick="openDeleteModal('delete-form-{{ $product->id }}')" type="button">
-                                            Delete
-                                        </button>
-                                    </form>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <a class="inline-flex items-center gap-1.5 text-teal-400 hover:text-teal-300 font-medium text-xs transition-colors px-3 py-1.5 rounded bg-teal-500/10 border border-teal-500/20 hover:bg-teal-500/20" href="{{ route("products.download-cert", $product->id) }}">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                            </svg>
+                                            Download .cert
+                                        </a>
+
+                                        <form action="{{ route("products.destroy", $product->id) }}" id="delete-form-{{ $product->id }}" method="POST">
+                                            @csrf
+                                            @method("DELETE")
+                                            <button class="text-gray-500 hover:text-red-500 font-medium text-xs transition-colors px-3 py-1.5 rounded hover:bg-red-500/10" onclick="openDeleteModal('delete-form-{{ $product->id }}')" type="button">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

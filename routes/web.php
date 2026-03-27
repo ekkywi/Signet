@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('/products/{id}/certificate', [ProductController::class, 'downloadCert'])->name('products.download-cert');
 
     // Licenses Management
     Route::get('/licenses', [LicenseController::class, 'index'])->name('licenses.index');
