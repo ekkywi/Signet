@@ -26,19 +26,16 @@ class HsmService
         }
     }
 
-    public function generateProductIdentity(array $payload): ?array
+    public function generateProductIdentity(array $data)
     {
         try {
             $response = Http::timeout(10)->post("{$this->baseUrl}/api/hsm/generate-identity", [
                 'command' => 'GENERATE_IDENTITY',
-                'data' => $payload,
+                'data' => $data,
             ]);
 
-            if ($response->successful() && $response->json('status') === 'success') {
-                return [
-                    'encrypted_private_key' => $response->json('data.encrypted_private_key'),
-                    'certificate' => $response->json('data.certificate'),
-                ];
+            if ($response->successful()) {
+                return $response->json();
             }
 
             Log::error('[HSM PKI ERROR] Failed to generate identity. Response: ' . $response->body());
