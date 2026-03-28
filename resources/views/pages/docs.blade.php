@@ -3,51 +3,60 @@
     <div class="px-8 py-8 border-b border-gray-800/50 bg-[#0a0a0a]/50 sticky top-0 backdrop-blur-xl z-20">
         <div class="max-w-7xl mx-auto w-full">
             <h2 class="text-2xl font-bold text-white tracking-tight">Developer Documentation</h2>
-            <p class="text-sm text-gray-500 mt-1">Integrate Signet's licensing engine into your client applications.</p>
+            <p class="text-sm text-gray-500 mt-1">Integrate Signet's Micro-PKI licensing engine into your client applications.</p>
         </div>
     </div>
 
     <div class="p-8 max-w-7xl mx-auto w-full">
         <div class="flex flex-col md:flex-row gap-10">
 
-            <div class="w-full md:w-64 flex-shrink-0">
+            <div class="w-full md:w-64 flex-shrink-0 relative">
                 <div class="sticky top-40 space-y-8">
                     <div>
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Getting Started</h4>
-                        <ul class="space-y-2">
-                            <li><a class="text-sm text-gray-400 hover:text-teal-400 transition-colors" href="#authentication">Authentication</a></li>
-                            <li><a class="text-sm text-gray-400 hover:text-teal-400 transition-colors" href="#hardware-lock">Hardware Locking</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Official SDKs</h4>
-                        <ul class="space-y-2">
-                            <li><a class="text-sm text-teal-500 font-medium hover:text-teal-400 transition-colors flex items-center gap-2" href="#python-sdk">
+                        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-4">Contents</h4>
+                        <ul class="space-y-3 border-l border-gray-800 pl-4" id="toc-menu">
+                            <li>
+                                <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-teal-400 border-teal-500" href="#authentication">Authentication</a>
+                            </li>
+                            <li>
+                                <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#hardware-lock">Hardware Locking</a>
+                            </li>
+                            <li class="pt-2 pb-1">
+                                <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest block -ml-4 pl-4">Official SDKs</span>
+                            </li>
+                            <li>
+                                <a class="toc-link flex items-center justify-between text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#python-sdk">
                                     Python SDK
-                                    <span class="bg-teal-500/20 text-teal-400 text-[10px] px-1.5 py-0.5 rounded uppercase font-bold tracking-widest">Recommended</span>
-                                </a></li>
-                            <li><a class="text-sm text-indigo-400 font-medium hover:text-indigo-300 transition-colors flex items-center gap-2" href="#php-sdk">
-                                    PHP SDK (New)
-                                    <span class="bg-indigo-500/20 text-indigo-400 text-[10px] px-1.5 py-0.5 rounded uppercase font-bold tracking-widest">Latest</span>
-                                </a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Raw API Endpoints</h4>
-                        <ul class="space-y-2">
-                            <li><a class="text-sm text-gray-400 hover:text-teal-400 transition-colors" href="#validate-license">Validate License</a></li>
-                            <li><a class="text-sm text-gray-400 hover:text-teal-400 transition-colors" href="#deactivate-license">Deactivate License</a></li>
+                                    <span class="bg-teal-500/10 text-teal-400 text-[9px] px-1.5 py-0.5 rounded border border-teal-500/20">REC</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="toc-link flex items-center justify-between text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#php-sdk">
+                                    PHP SDK
+                                    <span class="bg-indigo-500/10 text-indigo-400 text-[9px] px-1.5 py-0.5 rounded border border-indigo-500/20">NEW</span>
+                                </a>
+                            </li>
+                            <li class="pt-2 pb-1">
+                                <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest block -ml-4 pl-4">Raw API Endpoints</span>
+                            </li>
+                            <li>
+                                <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#validate-license">Validate License</a>
+                            </li>
+                            <li>
+                                <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#deactivate-license">Deactivate License</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="flex-1 space-y-12 pb-20">
+            <div class="flex-1 space-y-16 pb-20 max-w-3xl">
 
                 <section class="scroll-mt-40" id="authentication">
                     <h3 class="text-xl font-bold text-white mb-4">Authentication</h3>
                     <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                        All API requests to Signet must be authenticated using an API Key. You can generate API Keys from your dashboard. Include the key in the header of your HTTP requests.
+                        All online API requests to Signet must be authenticated using an API Key. You can generate API Keys from your dashboard. Include the key in the header of your HTTP requests.
+                        <br><span class="text-teal-400 italic">Note: Offline validation using X.509 certificates does not require API keys.</span>
                     </p>
                     <div class="bg-[#111] border border-gray-800 rounded-xl overflow-hidden">
                         <div class="bg-[#0a0a0a] px-4 py-2 border-b border-gray-800">
@@ -59,29 +68,29 @@
                     </div>
                 </section>
 
-                <hr class="border-gray-800">
+                <hr class="border-gray-800/60">
 
                 <section class="scroll-mt-40" id="hardware-lock">
                     <h3 class="text-xl font-bold text-white mb-4">Hardware Locking (Node-Locked)</h3>
                     <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                        Signet uses a robust device management system. If a license is configured to require a hardware lock, your client application must provide a unique, immutable <code class="text-teal-400 font-mono text-xs">hardware_id</code> (such as a Motherboard MAC Address, CPU Serial, or App UUID).
+                        Signet uses a robust device management system. If a license is configured to require a hardware lock, your client application must provide a unique, immutable <code class="text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded font-mono text-xs">hardware_id</code> (such as a hashed Motherboard MAC Address, CPU Serial, or App UUID).
                     </p>
                     <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5 mt-4">
                         <div class="flex gap-3">
-                            <svg class="w-5 h-5 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                             </svg>
                             <div>
                                 <h5 class="text-sm font-semibold text-blue-400 mb-1">Important Implementation Note</h5>
                                 <p class="text-xs text-blue-300 leading-relaxed">
-                                    The <code class="font-mono bg-blue-900/50 px-1 rounded">hardware_id</code> is used to count "Activation Slots". If a license allows 3 Max Devices, the first 3 unique hardware IDs will be registered. Any 4th device attempting to validate the same key will be rejected until one of the existing devices is deactivated.
+                                    The <code class="font-mono bg-blue-900/50 px-1 rounded">hardware_id</code> is used to count "Activation Slots". If a license allows 3 Max Devices, the first 3 unique hardware IDs will be cryptographically bound. Any 4th device attempting to validate the same key will be rejected until an existing device is deactivated.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <hr class="border-gray-800">
+                <hr class="border-gray-800/60">
 
                 <section class="scroll-mt-40" id="python-sdk">
                     <div class="flex items-center gap-3 mb-4">
@@ -110,14 +119,14 @@
 client = SignetClient(
     api_url=<span class="text-green-400">"https://your-domain.com"</span>,
     api_key=<span class="text-green-400">"sgnt_live_your_api_key"</span>,
-    public_key_pem=<span class="text-green-400">"-----BEGIN PUBLIC KEY-----\n..."</span>
+    public_key_pem=<span class="text-green-400">"-----BEGIN CERTIFICATE-----\n..."</span>
 )
 
 <span class="text-gray-500"># 2. Check local offline license first (Zero-Trust)</span>
 is_valid = client.verify_local_license(cert_path=<span class="text-green-400">"license.cert"</span>)
 
 <span class="text-purple-400">if not</span> is_valid:
-    <span class="text-gray-500"># 3. If offline fails, activate online</span>
+    <span class="text-gray-500"># 3. If offline fails, activate online via API</span>
     result = client.activate_license(
         license_key=<span class="text-green-400">"USER-SERIAL-KEY"</span>,
         product_slug=<span class="text-green-400">"your-product-slug"</span>,
@@ -139,7 +148,7 @@ is_valid = client.verify_local_license(cert_path=<span class="text-green-400">"l
                     </div>
                 </section>
 
-                <hr class="border-gray-800">
+                <hr class="border-gray-800/60">
 
                 <section class="scroll-mt-40" id="php-sdk">
                     <div class="flex items-center gap-3 mb-4">
@@ -147,7 +156,7 @@ is_valid = client.verify_local_license(cert_path=<span class="text-green-400">"l
                         <h3 class="text-xl font-bold text-white">Official PHP SDK</h3>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Perfect for licensing Laravel applications, WordPress plugins, or any PSR-4 compliant PHP project. It utilizes PHP's native OpenSSL extension for blazing-fast Zero-Trust verification.
+                        Perfect for licensing Laravel applications, WordPress plugins, or any PSR-4 compliant PHP project. It utilizes PHP's native OpenSSL extension for blazing-fast Zero-Trust verification against your X.509 certificate.
                     </p>
 
                     <div class="grid grid-cols-1 gap-6">
@@ -169,14 +178,14 @@ is_valid = client.verify_local_license(cert_path=<span class="text-green-400">"l
 $client = <span class="text-purple-400">new</span> SignetClient(
     <span class="text-blue-400">env</span>(<span class="text-green-400">'SIGNET_API_URL'</span>),
     <span class="text-blue-400">env</span>(<span class="text-green-400">'SIGNET_API_KEY'</span>),
-    <span class="text-blue-400">str_replace</span>(<span class="text-green-400">'\n'</span>, <span class="text-green-400">"\n"</span>, <span class="text-blue-400">env</span>(<span class="text-green-400">'SIGNET_PUBLIC_KEY'</span>))
+    <span class="text-blue-400">str_replace</span>(<span class="text-green-400">'\n'</span>, <span class="text-green-400">"\n"</span>, <span class="text-blue-400">env</span>(<span class="text-green-400">'SIGNET_CERTIFICATE'</span>))
 );
 
 <span class="text-gray-500">// 2. Generate immutable server fingerprint</span>
 $hardwareId = HardwareId::<span class="text-blue-400">getServerFingerprint</span>();
 $certPath = <span class="text-blue-400">storage_path</span>(<span class="text-green-400">'license.cert'</span>);
 
-<span class="text-gray-500">// 3. Verify Offline First</span>
+<span class="text-gray-500">// 3. Verify Offline First (No API call made)</span>
 <span class="text-purple-400">if</span> (!$client-><span class="text-blue-400">verifyLocalLicense</span>($certPath, $hardwareId)) {
     <span class="text-gray-500">// 4. If invalid/expired, activate online</span>
     $result = $client-><span class="text-blue-400">activateLicense</span>(
@@ -200,7 +209,7 @@ $certPath = <span class="text-blue-400">storage_path</span>(<span class="text-gr
                     </div>
                 </section>
 
-                <hr class="border-gray-800">
+                <hr class="border-gray-800/60">
 
                 <section class="scroll-mt-40" id="validate-license">
                     <div class="flex items-center gap-3 mb-4">
@@ -208,7 +217,7 @@ $certPath = <span class="text-blue-400">storage_path</span>(<span class="text-gr
                         <h3 class="text-xl font-bold text-white">Raw API: Validate License</h3>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Verifies a license key, checks its expiration, and registers the client's hardware ID to consume an activation slot. Use this only if you are building an integration in a language other than Python or PHP.
+                        Verifies a license key, checks its expiration, and registers the client's hardware ID to consume an activation slot. Use this only if you are building an integration in a language without an official SDK.
                     </p>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -269,13 +278,13 @@ $certPath = <span class="text-blue-400">storage_path</span>(<span class="text-gr
 
                             <div class="bg-teal-500/10 border border-teal-500/20 rounded-xl p-5">
                                 <div class="flex gap-3">
-                                    <svg class="w-5 h-5 text-teal-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                                     </svg>
                                     <div>
-                                        <h5 class="text-sm font-semibold text-teal-400 mb-1">Crucial Security Step: Verify the Signature</h5>
+                                        <h5 class="text-sm font-semibold text-teal-400 mb-1">Crucial Security Step: Verify the ECDSA Signature</h5>
                                         <p class="text-xs text-teal-300/80 leading-relaxed">
-                                            Do not just check for a <code class="font-mono bg-teal-900/50 px-1 rounded">200 OK</code> status. To prevent server-spoofing, your application must stringify the <code class="font-mono bg-teal-900/50 px-1 rounded">signed_payload</code> object and verify it against the Base64 <code class="font-mono bg-teal-900/50 px-1 rounded">signature</code> using Signet's ECDSA Public Key embedded in your app.
+                                            Do not just check for a <code class="font-mono bg-teal-900/50 px-1 rounded">200 OK</code> status. To prevent server-spoofing, your application must stringify the <code class="font-mono bg-teal-900/50 px-1 rounded">signed_payload</code> object and verify it against the Base64 <code class="font-mono bg-teal-900/50 px-1 rounded">signature</code> using Signet's X.509 Certificate embedded in your app.
                                         </p>
                                     </div>
                                 </div>
@@ -312,7 +321,7 @@ $certPath = <span class="text-blue-400">storage_path</span>(<span class="text-gr
                     </div>
                 </section>
 
-                <hr class="border-gray-800">
+                <hr class="border-gray-800/60">
 
                 <section class="scroll-mt-40" id="deactivate-license">
                     <div class="flex items-center gap-3 mb-4">
@@ -355,4 +364,39 @@ $certPath = <span class="text-blue-400">storage_path</span>(<span class="text-gr
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const tocLinks = document.querySelectorAll('.toc-link');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-100px 0px -60% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const activeId = entry.target.getAttribute('id');
+
+                        tocLinks.forEach(link => {
+                            link.classList.remove('text-teal-400', 'border-teal-500');
+                            link.classList.add('text-gray-500', 'border-transparent');
+
+                            if (link.getAttribute('href') === `#${activeId}`) {
+                                link.classList.remove('text-gray-500', 'border-transparent');
+                                link.classList.add('text-teal-400', 'border-teal-500');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
 </x-layouts.app>

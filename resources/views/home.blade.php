@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Signet | Free & Bulletproof Software Licensing for Developers</title>
+    <title>Signet | Enterprise-Grade Micro-PKI & Software Licensing</title>
 
     @vite(["resources/css/app.css", "resources/js/app.js"])
 
@@ -57,7 +57,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
                 </span>
-                100% Free. Built by developers, for developers.
+                100% Free Cloud KMS. Built by developers, for developers.
             </div>
 
             <h1 class="text-6xl sm:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 leading-[0.95] text-white">
@@ -68,7 +68,7 @@
             </h1>
 
             <p class="max-w-3xl text-xl sm:text-2xl text-gray-400 mb-12 font-medium leading-relaxed">
-                Protect your digital assets from piracy without breaking the bank. Generate secure serial keys, enforce node-locked hardware binding, and validate licenses—completely free for the community.
+                Protect your digital assets from piracy without breaking the bank. Generate secure serial keys, enforce node-locked hardware binding, and issue X.509 cryptographic identities—completely free for the community.
             </p>
 
             <div class="flex flex-col sm:flex-row gap-5 w-full sm:w-auto z-10">
@@ -93,7 +93,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-4 tracking-tight relative z-10">Dynamic API Licenses</h3>
                     <p class="text-gray-400 leading-relaxed text-base mb-6 flex-grow relative z-10">
-                        Generate robust serial numbers (e.g., XXXX-XXXX-XXXX) instantly. Validate user subscriptions and access limits in real-time without worrying about expensive API costs.
+                        Generate robust serial numbers instantly. Validate user subscriptions and access limits in real-time without worrying about expensive Cloud KMS API costs.
                     </p>
                 </div>
 
@@ -106,7 +106,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-4 tracking-tight relative z-10">Node-Locked Binding</h3>
                     <p class="text-gray-400 leading-relaxed text-base mb-6 flex-grow relative z-10">
-                        Stop unauthorized distribution permanently. Tie licenses directly to the end-user's Machine ID (MAC Address or CPU ID). If the software is copied to another device, it locks down instantly.
+                        Stop unauthorized distribution permanently. Tie licenses directly to the end-user's Machine ID (MAC Address or CPU ID). If the software is copied to another VM, it locks down instantly.
                     </p>
                 </div>
 
@@ -117,9 +117,9 @@
                             <path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4 tracking-tight relative z-10">Hardware-Backed Security</h3>
+                    <h3 class="text-2xl font-bold text-white mb-4 tracking-tight relative z-10">Hardware Micro-PKI</h3>
                     <p class="text-gray-400 leading-relaxed text-base mb-6 flex-grow relative z-10">
-                        Enterprise security, democratized. Signet generates and signs your licenses using our custom-made Hardware Security Modules. Cryptographic keys remain physically isolated and tamper-proof.
+                        Enterprise security, democratized. Signet acts as a standalone Root CA, generating unique keypairs and mathematically unforgeable X.509 certificates directly from air-gapped silicon.
                     </p>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-mono text-teal-400 mb-6">Custom Silicon Architecture</div>
                     <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-6">Engineered from the<br>Silicon Up.</h2>
                     <p class="text-lg text-gray-400 leading-relaxed mb-8">
-                        True security requires physical isolation. We didn't just write software; we custom-engineered our own <strong class="text-gray-200">Proprietary Micro HSMs</strong> to act as the cryptographic heart of the Signet platform.
+                        True security requires physical isolation. We didn't just write software; we custom-engineered our own <strong class="text-gray-200">Proprietary Micro HSMs</strong> to act as the cryptographic Root CA of the Signet platform.
                     </p>
                     <div class="space-y-6">
                         <div>
@@ -161,7 +161,7 @@
                                 </svg>
                                 Zero-Trust Verification
                             </h4>
-                            <p class="text-sm text-gray-400 pl-7">We utilize high-speed <strong class="text-gray-300">ECDSA (secp256r1)</strong> for digital signatures. Your client app verifies the payload locally using an embedded Public Key, rendering server-spoofing attacks mathematically impossible.</p>
+                            <p class="text-sm text-gray-400 pl-7">We don't ask your app to blindly trust our servers. Powered by <strong class="text-gray-300">ECDSA (secp256r1)</strong> and standard <strong class="text-gray-300">X.509 Certificates</strong>, your client app mathematically verifies every payload locally. True zero-trust, rendering server-spoofing attacks impossible.</p>
                         </div>
                         <div>
                             <h4 class="text-white font-semibold flex items-center gap-2 mb-2">
@@ -170,7 +170,7 @@
                                 </svg>
                                 Zero-Knowledge Boundary
                             </h4>
-                            <p class="text-sm text-gray-400 pl-7">Private keys are flashed directly into the physical silicon of our custom HSM cluster. They never leave the hardware, meaning even our own server administrators cannot extract them.</p>
+                            <p class="text-sm text-gray-400 pl-7">Master Private Keys are flashed directly into the physical silicon of our air-gapped HSM cluster. They never leave the hardware, meaning even our own server administrators cannot extract them.</p>
                         </div>
                         <div>
                             <h4 class="text-white font-semibold flex items-center gap-2 mb-2">
@@ -179,7 +179,7 @@
                                 </svg>
                                 Why is it Free?
                             </h4>
-                            <p class="text-sm text-gray-400 pl-7">Enterprise HSM solutions cost thousands of dollars per month. By researching, designing, and hosting our own hardware infrastructure in-house, we slashed overhead costs by 99%—allowing us to give it back to the developer community for free.</p>
+                            <p class="text-sm text-gray-400 pl-7">Enterprise KMS solutions cost thousands of dollars per month. By researching, designing, and hosting our own hardware infrastructure in-house, we slashed overhead costs by 99%—allowing us to give it back to the developer community for free.</p>
                         </div>
                     </div>
                 </div>
@@ -213,7 +213,7 @@
                             <svg class="w-6 h-6 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                             </svg>
-                            <span>Signet HSM returns a Base64 Signature. Your Client SDK verifies it locally. Access Granted.</span>
+                            <span>Signet returns a Base64 Signature backed by your X.509 Certificate. Client verifies it locally.</span>
                         </div>
                     </div>
                 </div>
@@ -310,7 +310,9 @@
                         <a class="px-3 py-1.5 bg-teal-500/10 border border-teal-500/40 rounded-lg text-xs text-teal-300 font-mono hover:bg-teal-500/20 transition-all flex items-center gap-2 shadow-[0_0_10px_rgba(20,184,166,0.1)]" href="https://github.com/trezanix/signet-python-sdk" target="_blank">
                             <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> Python SDK
                         </a>
-                        <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-indigo-400 hover:border-indigo-900 transition-colors">PHP / Laravel</span>
+                        <a class="px-3 py-1.5 bg-teal-500/10 border border-teal-500/40 rounded-lg text-xs text-teal-300 font-mono hover:bg-teal-500/20 transition-all flex items-center gap-2 shadow-[0_0_10px_rgba(20,184,166,0.1)]" href="https://github.com/trezanix/signet-php-sdk" target="_blank">
+                            <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> PHP SDK
+                        </a>
                         <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-green-400 hover:border-green-900 transition-colors">Node.js</span>
                         <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-cyan-400 hover:border-cyan-900 transition-colors">Go</span>
                         <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-lg text-xs text-gray-400 font-mono hover:text-red-500 hover:border-red-900 transition-colors">Ruby</span>
@@ -369,7 +371,7 @@
                         What happens if the Signet API goes offline?
                     </h3>
                     <p class="text-gray-400 text-sm leading-relaxed">
-                        Your app won't break. Signet utilizes asymmetric cryptography (ECDSA). Once a license payload is validated and cached locally on your client's machine, your application can cryptographically verify the signature offline without ever needing to contact our servers again (until the license expires).
+                        Your app won't break. Signet utilizes asymmetric cryptography (ECDSA). Once a license payload is validated and cached locally on your client's machine, your application can cryptographically verify the signature offline without ever needing to contact our servers again.
                     </p>
                 </div>
 
@@ -422,7 +424,7 @@
                 </div>
             </div>
             <p class="text-sm text-gray-600">
-                Signet is an advanced software licensing product engineered by <a class="text-teal-600 hover:text-teal-500 font-medium" href="https://trezanix.com">Trezanix</a>.<br>
+                Signet is an advanced Cloud KMS & Licensing product engineered by <a class="text-teal-600 hover:text-teal-500 font-medium" href="https://trezanix.com">Trezanix</a>.<br>
                 From developers, to developers. Completely free to use.
             </p>
         </div>

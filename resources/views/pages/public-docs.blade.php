@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Documentation | Signet by Trezanix</title>
+    <title>Documentation | Signet Micro-PKI by Trezanix</title>
 
     @vite(["resources/css/app.css", "resources/js/app.js"])
 
@@ -44,7 +44,7 @@
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-mono text-teal-400 mb-6">Documentation Overview</div>
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">How Signet Works.</h1>
             <p class="max-w-2xl text-lg text-gray-400 leading-relaxed">
-                Understand the architecture, security models, and implementation strategies of the Signet Licensing Platform before you start integrating it into your code.
+                Understand the Micro-PKI architecture, Zero-Trust security models, and X.509 implementation strategies of the Signet platform before integrating it into your code.
             </p>
         </div>
     </header>
@@ -64,7 +64,7 @@
                             <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#hsm-security">Micro HSM Security</a>
                         </li>
                         <li>
-                            <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#license-types">License Types</a>
+                            <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#license-types">License Paradigms</a>
                         </li>
                         <li>
                             <a class="toc-link block text-sm font-medium transition-all duration-300 -ml-[17px] pl-4 border-l-2 text-gray-500 border-transparent hover:text-gray-300" href="#integration">Integration Flow</a>
@@ -73,7 +73,7 @@
 
                     <div class="mt-8 p-5 rounded-2xl bg-gradient-to-b from-[#111] to-[#0A0A0A] border border-gray-800">
                         <h5 class="text-sm font-bold text-white mb-2">Ready to code?</h5>
-                        <p class="text-xs text-gray-500 mb-4 leading-relaxed">Log in to your workspace to access the technical API endpoints, JSON structures, and your API Keys.</p>
+                        <p class="text-xs text-gray-500 mb-4 leading-relaxed">Log in to your workspace to generate your API Keys, download SDKs, and retrieve your Public Certificates.</p>
                         <a class="text-xs font-bold text-teal-400 hover:text-teal-300 flex items-center gap-1" href="/login">
                             Go to Developer API
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,10 +90,10 @@
                 <section class="scroll-mt-32" id="introduction">
                     <h2 class="text-3xl font-bold text-white mb-6">The New Standard in Software Licensing</h2>
                     <p class="text-gray-400 leading-relaxed mb-6 text-lg">
-                        Signet isn't just another license manager; it's a cryptographic fortress for your digital assets. Built from the ground up by Trezanix, Signet delivers API-first, military-grade licensing—empowering developers to generate serials, enforce strict hardware binding, and manage subscriptions without the exorbitant enterprise price tag.
+                        Signet isn't just another license manager; it's a cryptographic fortress for your digital assets. Operating as a standalone <strong>Cloud Key Management Service (KMS)</strong>, Signet delivers API-first, military-grade licensing—empowering developers to issue serials, enforce strict hardware binding, and validate payloads offline.
                     </p>
                     <p class="text-gray-400 leading-relaxed">
-                        Whether you're shipping a high-performance C++ desktop engine, a cross-platform Rust/Tauri app, or a sleek Node.js backend, Signet's universal REST API integrates into your deployment pipeline in minutes, not days.
+                        Whether you're shipping a high-performance C++ desktop engine, a cross-platform Rust/Tauri app, or a sleek Node.js backend, Signet's universal REST API and native SDKs integrate into your deployment pipeline in minutes.
                     </p>
                 </section>
 
@@ -107,10 +107,10 @@
                         <h2 class="text-3xl font-bold text-white tracking-tight">Hardware-Backed Cryptography</h2>
                     </div>
                     <p class="text-gray-400 leading-relaxed mb-6">
-                        Most licensing servers store your cryptographic private keys in vulnerable SQL databases or basic environment files. If their server is compromised, your keys are stolen, and pirates can mint fake licenses indefinitely. <strong>Signet rewrites the rules.</strong>
+                        Traditional licensing servers store cryptographic private keys in vulnerable SQL databases or basic environment files. If their server is compromised, your keys are stolen, and pirates can mint fake licenses indefinitely. <strong>Signet rewrites the rules.</strong>
                     </p>
                     <p class="text-gray-400 leading-relaxed mb-8">
-                        We utilize proprietary <strong>Micro Hardware Security Modules (HSMs)</strong> custom-engineered by Trezanix. Your cryptographic signatures are calculated directly inside physically isolated silicon chips, rendering database leaks irrelevant.
+                        We utilize custom <strong>Micro Hardware Security Modules (HSMs)</strong> powered by dedicated silicon arrays. Your cryptographic signatures are calculated directly inside these physically isolated chips, completely neutralizing database breaches and memory-extraction attacks.
                     </p>
                     <div class="bg-gradient-to-br from-[#111] to-[#0A0A0A] border border-gray-800 p-7 rounded-2xl relative overflow-hidden group">
                         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-teal-900/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
@@ -118,10 +118,10 @@
                             <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                             </svg>
-                            The Zero-Knowledge Guarantee
+                            The Air-Gapped Guarantee
                         </h4>
                         <p class="text-sm text-gray-400 leading-relaxed relative z-10">
-                            When your client validates a key, our API simply acts as a secure courier. The payload is forwarded to the HSM cluster, signed via ECDSA, and returned. <strong>The private key never touches the internet, memory, or storage.</strong> Even our own system administrators cannot extract it.
+                            Our API acts merely as a secure courier. Payloads are forwarded to the HSM cluster via serial bridge, signed using <strong>ECDSA (secp256r1)</strong>, and returned. The master keys never touch the internet, RAM pools, or storage. Zero trust, absolute security.
                         </p>
                     </div>
                 </section>
@@ -143,7 +143,7 @@
                                 Node-Locked
                             </h3>
                             <p class="text-sm text-gray-400 leading-relaxed">
-                                The ultimate anti-piracy measure. The license is cryptographically fused to a user's specific Machine ID (MAC Address, CPU Serial, or UUID). If a user attempts to clone the VM or copy the software to an unauthorized device, validation fails instantly.
+                                The ultimate anti-piracy measure. The license is cryptographically fused to a user's specific Machine ID (MAC Address, CPU Serial, or UUID). If a user attempts to clone the VM or copy the software to an unauthorized device, local verification fails instantly.
                             </p>
                         </div>
                         <div class="bg-[#111] border border-gray-800 p-7 rounded-2xl hover:border-teal-500/40 hover:bg-[#151515] transition-all duration-300 shadow-xl shadow-black/50 group">
@@ -166,7 +166,7 @@
                     <h2 class="text-3xl font-bold text-white mb-6">Frictionless Developer Experience</h2>
 
                     <p class="text-gray-400 leading-relaxed mb-10">
-                        We despise complex integration processes. Signet operates via pure HTTP REST APIs, and we provide <strong>Official Drop-in SDKs</strong> (Python, C++, C#, etc.) to handle the heavy cryptographic lifting for you. Here is your path to total security:
+                        We despise complex integration processes. Signet operates via pure HTTP REST APIs, and we provide <strong>Official Drop-in SDKs</strong> (Python, PHP, Node.js) to handle the heavy cryptographic lifting for you. Here is your path to total offline security:
                     </p>
 
                     <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-800 before:to-transparent">
@@ -174,32 +174,32 @@
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                             <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-teal-500/20 text-teal-400 font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">1</div>
                             <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-[#0A0A0A] border border-gray-800 hover:border-gray-700 transition-colors shadow-lg">
-                                <h4 class="text-white font-bold mb-1">Register Your App</h4>
-                                <p class="text-sm text-gray-500 leading-relaxed">Log into the Signet Console and define your product ecosystem. Set your default security policies in seconds.</p>
+                                <h4 class="text-white font-bold mb-1">Generate App Identity</h4>
+                                <p class="text-sm text-gray-500 leading-relaxed">Register your product in the Dashboard. Signet's HSM will instantly generate a mathematically unique <strong>X.509 Certificate</strong> and air-gapped Private Key exclusively for your software.</p>
                             </div>
                         </div>
 
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                             <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-teal-500/20 text-teal-400 font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">2</div>
                             <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-[#0A0A0A] border border-gray-800 hover:border-gray-700 transition-colors shadow-lg">
-                                <h4 class="text-white font-bold mb-1">Acquire API Credentials</h4>
-                                <p class="text-sm text-gray-500 leading-relaxed">Generate a secure <code class="text-xs text-teal-400 bg-teal-500/10 px-1 rounded">x-api-key</code>. This token will authenticate your client application's requests to our infrastructure.</p>
+                                <h4 class="text-white font-bold mb-1">Embed the Certificate</h4>
+                                <p class="text-sm text-gray-500 leading-relaxed">Download your <code class="text-xs text-teal-400 bg-teal-500/10 px-1 rounded">.cert</code> file (Public Key) from the dashboard and bundle it securely inside your application's source code.</p>
                             </div>
                         </div>
 
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                             <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-teal-500/20 text-teal-400 font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">3</div>
                             <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-[#0A0A0A] border border-gray-800 hover:border-gray-700 transition-colors shadow-lg">
-                                <h4 class="text-white font-bold mb-1">Mint Licenses</h4>
-                                <p class="text-sm text-gray-500 leading-relaxed">Issue cryptographically secure serial keys (e.g., <code class="text-xs text-gray-400 bg-gray-800 px-1 rounded font-mono">XXXX-XXXX-XXXX</code>) to your paying customers via the dashboard.</p>
+                                <h4 class="text-white font-bold mb-1">Mint & Sign Licenses</h4>
+                                <p class="text-sm text-gray-500 leading-relaxed">Issue serial keys to your users. When a user activates the key, our HSM signs their machine's hardware footprint with your Private Key, generating an unforgeable signature token.</p>
                             </div>
                         </div>
 
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                             <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-teal-500/20 text-teal-400 font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">4</div>
                             <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-[#0A0A0A] border border-gray-800 hover:border-teal-900/50 hover:bg-[#111] transition-colors shadow-lg shadow-teal-900/10">
-                                <h4 class="text-white font-bold mb-1">Verify and Unlock</h4>
-                                <p class="text-sm text-gray-500 leading-relaxed">Send a <code class="text-xs text-teal-400 bg-teal-500/10 px-1 rounded">POST /validate</code> request. Signet returns a Base64 signature. Use our <strong>Client SDK</strong> to mathematically verify the payload locally against your Public Key. If valid, unlock the software!</p>
+                                <h4 class="text-white font-bold mb-1">Verify 100% Offline</h4>
+                                <p class="text-sm text-gray-500 leading-relaxed">Your app receives the signature token. Use our <strong>Client SDK</strong> to mathematically verify the signature against your embedded X.509 Certificate. If it matches, unlock the software permanently without internet!</p>
                             </div>
                         </div>
 
