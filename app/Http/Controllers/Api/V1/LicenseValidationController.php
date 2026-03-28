@@ -8,6 +8,8 @@ use App\Models\License;
 use App\Models\Product;
 use App\Services\HsmService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 
 class LicenseValidationController extends Controller
@@ -63,35 +65,47 @@ class LicenseValidationController extends Controller
 
         $clientIdentifier = $request->hardware_id;
 
-        if (empty($clientIdentifier)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Device Identifier (hardware_id) is required to count the activation.'
-            ], 400);
-        }
-
-        $existingActivation = $license->activations()->where('hardware_identifier', $clientIdentifier)->first();
-
-        if ($existingActivation) {
-
-            $existingActivation->update(['last_active_at' => now()]);
-        } else {
-            $currentUsage = $license->activations()->count();
-
-            if ($currentUsage >= $license->max_activations) {
+        if ($license->require_hardware_lock || $license->max_activations > 0) {
+            if (empty($clientIdentifier)) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Activation limit reached. This license is already used by ' . $license->max_activations . ' device(s).'
-                ], 403);
+                    'message' => 'Device Identifier (hardware_id) is required for this license to track active seats/devices.'
+                ], 400);
             }
+        }
 
-            $license->activations()->create([
-                'hardware_identifier' => $clientIdentifier,
-                'device_name' => $request->device_name ?? 'Unknown Device',
-                'last_active_at' => now(),
-            ]);
+        if (!empty($clientIdentifier)) {
+            $existingActivation = $license->activations()->where('hardware_identifier',  $clientIdentifier)->first();
 
-            $license->update(['activations_count' => $currentUsage + 1]);
+            if ($existingActivation) {
+                $existingActivation->update(['last_active_at' => now()]);
+            } else {
+                $currentUsage = $license->activations()->count();
+
+                if ($license->max_activations > 0 && $currentUsage >= $license->max_activations) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Activation limit reached. This license is already used by ' . $license->max_activations . ' device(s).'
+                    ], 403);
+                }
+
+                $license->activations()->create([
+                    'hardware_identifier' => $clientIdentifier,
+                    'device_name' => $request->device_name ?? 'Unknown Device',
+                    'last_active_at' => now(),
+                ]);
+
+                $license->update(['activations_count' => $currentUsage + 1]);
+            }
+        }
+
+        try {
+            $privateKey = Crypt::decryptString($product->private_key);
+        } catch (DecryptException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal Security Error: Product cryptographic identity is corrupted.'
+            ], 500);
         }
 
         $payloadToSign = [
@@ -103,8 +117,8 @@ class LicenseValidationController extends Controller
         ];
 
         try {
-            $signature = Cache::lock('hsm-usb-port', 10)->block(5, function () use ($payloadToSign) {
-                return $this->hsm->signPayload($payloadToSign);
+            $signature = Cache::lock('hsm-usb-port', 10)->block(5, function () use ($payloadToSign, $privateKey) {
+                return $this->hsm->signPayload($payloadToSign, $privateKey);
             });
         } catch (LockTimeoutException $e) {
             return response()->json([
@@ -125,7 +139,7 @@ class LicenseValidationController extends Controller
             'message' => 'License is valid and cryptographically signed.',
             'data' => [
                 'product' => $product->name,
-                'type' => $license->require_hardware_lock ? 'node-locked' : 'floating',
+                'type' => $license->require_hardware_lock ? 'node-locked' : ($license->max_activations > 0 ? 'floating' : 'unrestricted'),
                 'expires_at' => $license->expires_at ? $license->expires_at->toIso8601String() : 'lifetime',
                 'signed_payload' => $payloadToSign
             ],
