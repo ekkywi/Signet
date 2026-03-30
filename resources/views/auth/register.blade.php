@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Create Account | Signet Console</title>
+    <title>Signet | Create Account</title>
 
     @vite(["resources/css/app.css", "resources/js/app.js"])
     <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet" />
@@ -23,9 +23,9 @@
                     <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
             </a>
-            <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-white">Start building for free</h2>
+            <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-white">Secure your software today</h2>
             <p class="mt-2 text-center text-sm text-gray-400">
-                No credit card required. Unlimited API validations.
+                Zero-trust licensing & key management. No credit card required.
             </p>
         </div>
 
@@ -63,7 +63,7 @@
                     <div>
                         <label class="block text-sm font-medium leading-6 text-gray-300" for="password">Password</label>
                         <div class="mt-1">
-                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset @error("password") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="password" name="password" placeholder="••••••••" required type="password">
+                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset @error("password") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="password" name="password" placeholder="••••••••••••" required type="password">
                         </div>
                         @error("password")
                             <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
                     <div>
                         <label class="block text-sm font-medium leading-6 text-gray-300" for="password_confirmation">Confirm Password</label>
                         <div class="mt-1">
-                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset ring-gray-800 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6 transition-all duration-300" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required type="password">
+                            <input class="block w-full rounded-xl border-0 bg-[#111] px-4 py-2.5 text-white shadow-sm ring-1 ring-inset ring-gray-800 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6 transition-all duration-300" id="password_confirmation" name="password_confirmation" placeholder="••••••••••••" required type="password">
                         </div>
                     </div>
 

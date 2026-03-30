@@ -1,4 +1,4 @@
-<x-layouts.app title="Dev Documentation - Signet">
+<x-layouts.app title="Signet | Developer Documentation">
 
     <div class="px-8 py-8 border-b border-gray-800/50 bg-[#0a0a0a]/50 sticky top-0 backdrop-blur-xl z-20">
         <div class="max-w-7xl mx-auto w-full">

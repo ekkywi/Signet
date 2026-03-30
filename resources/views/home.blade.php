@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Signet | Enterprise-Grade Micro-PKI & Software Licensing</title>
+    <title>Signet | Zero-Trust License & Key Management Platform</title>
 
     @vite(["resources/css/app.css", "resources/js/app.js"])
 
@@ -408,25 +408,48 @@
         <div class="absolute top-0 right-1/4 w-[600px] h-[400px] bg-purple-600/15 blur-[120px] rounded-full pointer-events-none -z-10"></div>
     </section>
 
-    <footer class="py-16 border-t border-gray-800/80 bg-[#060606]">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-            <div class="flex items-center justify-center gap-3 mb-8">
-                <div class="w-7 h-7 bg-[#111] rounded-lg flex items-center justify-center border border-gray-800">
+    <footer class="relative py-16 bg-[#030303] border-t border-white/5 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-teal-500/50 to-transparent"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[30px] bg-teal-500/10 blur-2xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center text-center">
+
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-[#111] rounded-lg flex items-center justify-center border border-gray-800 shadow-lg shadow-teal-500/10">
                     <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                     </svg>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-200 font-bold">&copy; {{ date("Y") }} Signet Console.</span>
-                    <span class="font-mono text-[10px] font-medium tracking-widest text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
+                    <span class="text-white font-bold tracking-wide">SIGNET</span>
+                    <span class="font-mono text-[10px] font-semibold tracking-widest text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
                         v{{ config("app.version", "1.0.0") }}
                     </span>
                 </div>
             </div>
-            <p class="text-sm text-gray-600">
-                Signet is an advanced Cloud KMS & Licensing product engineered by <a class="text-teal-600 hover:text-teal-500 font-medium" href="https://trezanix.com">Trezanix</a>.<br>
-                From developers, to developers. Completely free to use.
+
+            <p class="text-sm text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">
+                Zero-Trust License & Key Management Platform.<br>
+                Engineered with precision by <a class="text-teal-500 hover:text-teal-400 font-medium transition-colors" href="https://trezanix.com" target="_blank">Trezanix</a>.
             </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 mb-10">
+                <a class="text-sm font-medium text-gray-500 hover:text-white transition-colors" href="/help">Documentation</a>
+                <a class="text-sm font-medium text-gray-500 hover:text-white transition-colors" href="https://github.com/trezanix" target="_blank">GitHub</a>
+                <a class="text-sm font-medium text-gray-500 hover:text-white transition-colors" href="#">Security</a>
+
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/5">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+                    </span>
+                    <span class="text-xs font-medium text-gray-400">All systems operational</span>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-600">
+                &copy; {{ date("Y") }} Trezanix. All rights reserved. <br class="sm:hidden"><br> From developers for developers, completely free.
+            </div>
         </div>
     </footer>
 

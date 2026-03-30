@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Sign In | Signet Console</title>
+    <title>Signet | Sign In</title>
 
     @vite(["resources/css/app.css", "resources/js/app.js"])
     <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet" />
@@ -33,13 +33,28 @@
             <div class="bg-[#0A0A0A]/80 backdrop-blur-xl border border-gray-800 py-8 px-6 shadow-2xl shadow-black/50 rounded-3xl relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none"></div>
 
+                @if (session("status"))
+                    <div class="mb-6 rounded-xl bg-teal-500/10 border border-teal-500/50 p-4 relative z-10 animate-[fadeIn_0.5s_ease-out]">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-teal-400">{{ session("status") }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <form action="/login" class="space-y-6 relative z-10" method="POST">
                     @csrf
 
                     <div>
                         <label class="block text-sm font-medium leading-6 text-gray-300" for="email">Email address</label>
                         <div class="mt-2">
-                            <input autocomplete="email" class="block w-full rounded-xl border-0 bg-[#111] px-4 py-3 text-white shadow-sm ring-1 ring-inset @error("email") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="email" name="email" placeholder="admin@trezanix.com" required type="email" value="{{ old("email") }}">
+                            <input autocomplete="email" class="block w-full rounded-xl border-0 bg-[#111] px-4 py-3 text-white shadow-sm ring-1 ring-inset @error("email") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="email" name="email" placeholder="developer@example.com" required type="email" value="{{ old("email") }}">
                         </div>
                         @error("email")
                             <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +71,7 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <input autocomplete="current-password" class="block w-full rounded-xl border-0 bg-[#111] px-4 py-3 text-white shadow-sm ring-1 ring-inset @error("password") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="password" name="password" placeholder="••••••••" required type="password">
+                            <input autocomplete="current-password" class="block w-full rounded-xl border-0 bg-[#111] px-4 py-3 text-white shadow-sm ring-1 ring-inset @error("password") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all duration-300" id="password" name="password" placeholder="••••••••••••" required type="password">
                         </div>
                         @error("password")
                             <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +82,7 @@
 
                     <div>
                         <button class="flex w-full justify-center rounded-xl bg-teal-600 px-3 py-3.5 text-sm font-semibold leading-6 text-white shadow-lg shadow-teal-500/20 hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-all duration-300 active:scale-[0.98]" type="submit">
-                            Sign in to Console
+                            Sign in to Signet
                         </button>
                     </div>
                 </form>

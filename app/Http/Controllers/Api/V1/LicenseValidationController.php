@@ -30,11 +30,16 @@ class LicenseValidationController extends Controller
             'device_name' => ['nullable', 'string'],
         ]);
 
-        $product = Product::where('slug', $request->product_slug)->first();
+        $workspaceId = $request->attributes->get('workspace_id');
+
+        $product = Product::where('slug', $request->product_slug)
+            ->where('workspace_id', $workspaceId)
+            ->first();
+
         if (!$product) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Product not found.',
+                'message' => 'Product not found or does not belong to your workspace.',
             ], 404);
         }
 
@@ -155,11 +160,16 @@ class LicenseValidationController extends Controller
             'hardware_id' => ['required', 'string'],
         ]);
 
-        $product = Product::where('slug', $request->product_slug)->first();
+        $workspaceId = $request->attributes->get('workspace_id');
+
+        $product = Product::where('slug', $request->product_slug)
+            ->where('workspace_id', $workspaceId)
+            ->first();
+
         if (!$product) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Product not found.',
+                'message' => 'Product not found or does not belong to your workspace.',
             ], 404);
         }
 

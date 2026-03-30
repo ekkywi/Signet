@@ -6,6 +6,7 @@ use App\Http\Controllers\Pages\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Pages\ApiKeyController;
 use App\Http\Controllers\Pages\ProductController;
 use App\Http\Controllers\Pages\LicenseController;
@@ -21,7 +22,13 @@ Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
-Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.request');
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('throttle:3,1')->name('password.email');
+
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'index'])->name('password.reset');
+    Route::post('/reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
+});
 
 Route::get('/help', function () {
     return view('pages.public-docs');

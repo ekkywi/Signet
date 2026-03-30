@@ -31,6 +31,8 @@ class VerifyApiKey
 
         $apiKey->update(['last_used_at' => now()]);
 
+        $request->attributes->add(['workspace_id' => $apiKey->workspace_id]);
+
         return $next($request);
     }
 }
