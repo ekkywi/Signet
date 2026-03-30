@@ -11,30 +11,74 @@ use App\Http\Controllers\Pages\ApiKeyController;
 use App\Http\Controllers\Pages\ProductController;
 use App\Http\Controllers\Pages\LicenseController;
 use App\Http\Controllers\Pages\ProfileController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
+
+/*
+|--------------------------------------------------------------------------
+| 1. PUBLIC ROUTES (Everyone Can Access)
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
-Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
-
-Route::get('/register', [RegisterController::class, 'index'])->name('register');
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
-Route::middleware('guest')->group(function () {
-    Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.request');
-    Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('throttle:3,1')->name('password.email');
-
-    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'index'])->name('password.reset');
-    Route::post('/reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
-});
-
 Route::get('/help', function () {
     return view('pages.public-docs');
 })->name('help.index');
 
+
+/*
+|--------------------------------------------------------------------------
+| 2. GUEST ROUTES (Only for users who are NOT logged in)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest')->group(function () {
+    // Authentication
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+
+    // Registration
+    Route::get('/register', [RegisterController::class, 'index'])->name('register');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+
+    // Password Reset
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('throttle:3,1')->name('password.email');
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'index'])->name('password.reset');
+    Route::post('/reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| 3. AUTH ROUTES (For users who are LOGGED IN but NOT necessarily verified)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect('/dashboard')->with('success', 'Email verified! Your workspace is ready to use.');
+    })->middleware(['signed'])->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('status', 'verification-link-sent');
+    })->middleware(['throttle:6,1'])->name('verification.send');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| 4. PROTECTED SYSTEM ROUTES (Must be logged in AND email verified to access)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -58,7 +102,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/licenses/activations/{id}', [LicenseController::class, 'revokeDevice'])->name('licenses.revoke-device');
     Route::put('/licenses/{id}', [LicenseController::class, 'update'])->name('licenses.update');
 
-    // API Documentation
+    // API Documentation (Internal)
     Route::get('/docs', function () {
         return view('pages.docs');
     })->name('docs');

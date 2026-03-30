@@ -31,7 +31,7 @@ class CustomResetPasswordNotification extends Notification
         ], false));
 
         return (new MailMessage)
-            ->subject('Reset Your Password | Signet Console')
+            ->subject('Account Password Reset Request | Signet')
             ->view('emails.reset-password', [
                 'url' => $url,
                 'user' => $notifiable

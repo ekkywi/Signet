@@ -35,10 +35,6 @@
             border-bottom: 1px solid #1f2937;
         }
 
-        .header img {
-            height: 40px;
-        }
-
         .content {
             padding: 40px;
             color: #d1d5db;
@@ -60,7 +56,7 @@
         }
 
         .button {
-            background-color: #0891b2;
+            background-color: #0d9488;
             color: #ffffff;
             text-decoration: none;
             padding: 14px 28px;
@@ -77,14 +73,9 @@
             font-size: 12px;
         }
 
-        .footer a {
-            color: #0891b2;
-            text-decoration: none;
-        }
-
         .warning-box {
             background-color: #111111;
-            border-left: 3px solid #0891b2;
+            border-left: 3px solid #0d9488;
             padding: 15px;
             margin-top: 30px;
             border-radius: 0 8px 8px 0;
@@ -99,28 +90,24 @@
         <table cellpadding="0" cellspacing="0" class="container" width="100%">
             <tr>
                 <td class="header">
-                    <h2 style="color: #22d3ee; margin: 0; letter-spacing: 1px;">SIGNET</h2>
+                    <h2 style="color: #2dd4bf; margin: 0; letter-spacing: 1px;">SIGNET</h2>
                 </td>
             </tr>
-
             <tr>
                 <td class="content">
-                    <h1>Password Reset Request</h1>
-                    <p>Hello <strong>{{ $user->name ?? "User" }}</strong>,</p>
-                    <p>We received a request to reset the password for your Signet account associated with <strong>{{ $user->email }}</strong>.</p>
+                    <h1>Verify Your Email Address</h1>
+                    <p>Welcome to Signet, <strong>{{ $user->name ?? "Developer" }}</strong>!</p>
+                    <p>Your workspace has been provisioned. To ensure the security of your account and activate your Cloud KMS, please verify your email address by clicking the button below.</p>
 
                     <div class="button-container">
-                        <a class="button" href="{{ $url }}">Reset Password</a>
+                        <a class="button" href="{{ $url }}">Initialize Console</a>
                     </div>
 
-                    <p>This password reset link will expire in <strong>{{ config("auth.passwords.users.expire") }} minutes</strong>.</p>
-
                     <div class="warning-box">
-                        <strong>Security Notice:</strong> If you did not request a password reset, no further action is required. Your account remains secure.
+                        <strong>Security Notice:</strong> If you did not create an account, no further action is required.
                     </div>
                 </td>
             </tr>
-
             <tr>
                 <td class="footer">
                     &copy; {{ date("Y") }} Signet. All rights reserved.<br>

@@ -9,6 +9,7 @@ use App\Models\Workspace;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -39,7 +40,7 @@ class RegisterController extends Controller
 
             Auth::login($user);
 
-            return redirect()->route('dashboard')->with('success', 'Welcome to Signet! Your workspace is ready.');
+            return redirect()->route('verification.notice');
         } catch (\Throwable $e) {
             DB::rollBack();
 
