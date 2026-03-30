@@ -117,6 +117,40 @@ app.post("/api/hsm/generate-identity", (req, res) => {
         .catch((e) => res.status(500).json(e));
 });
 
+app.post("/api/hsm/sign", (req, res) => {
+    if (!isPortOpen) return res.status(503).json({ status: "offline" });
+
+    const { command, privateKey, payload } = req.body;
+
+    if (!command || !privateKey || !payload) {
+        return res.status(400).json({
+            status: "error",
+            message:
+                "Missing required parameters (command, privateKey, or payload)",
+        });
+    }
+
+    new Promise((resolve, reject) => {
+        taskQueue.push({
+            payload: {
+                command: command,
+                privateKey: privateKey,
+                payload: payload,
+            },
+            resolve,
+            reject,
+        });
+        processNextTask();
+    })
+        .then((result) => {
+            res.json(result);
+        })
+        .catch((error) => {
+            console.error("[Node.js Bridge] Sign Error:", error);
+            res.status(500).json(error);
+        });
+});
+
 app.listen(HTTP_PORT, "0.0.0.0", () => {
     console.log(
         `[BRIDGE READY] HSM Bridge Daemon listening on port ${HTTP_PORT}`,

@@ -49,10 +49,14 @@ class HsmService
     public function signPayLoad(array $payload, string $privateKey)
     {
         try {
+            ksort($payload);
+
+            $payloadString = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
             $response = Http::timeout(10)->post("{$this->baseUrl}/api/hsm/sign", [
                 'command' => 'SIGN_PAYLOAD',
                 'privateKey' => $privateKey,
-                'payload' => $payload,
+                'payload' => $payloadString,
             ]);
 
             if ($response->successful()) {
