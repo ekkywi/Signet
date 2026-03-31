@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use App\Models\Product;
-use App\Services\HsmService;
+use App\Services\Security\HsmService;
 use Exception;
 
 class ProductController extends Controller

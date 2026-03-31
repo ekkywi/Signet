@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Pages\ApiKeyController;
 use App\Http\Controllers\Pages\ProductController;
 use App\Http\Controllers\Pages\LicenseController;
+use App\Http\Controllers\Pages\OfflineLicenseController;
 use App\Http\Controllers\Pages\ProfileController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -101,6 +102,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/licenses/{id}', [LicenseController::class, 'show'])->name('licenses.show');
     Route::delete('/licenses/activations/{id}', [LicenseController::class, 'revokeDevice'])->name('licenses.revoke-device');
     Route::put('/licenses/{id}', [LicenseController::class, 'update'])->name('licenses.update');
+
+    // Offline Licenses Management
+    Route::get('/offline-licenses', [OfflineLicenseController::class, 'index'])->name('offline-licenses.index');
+    Route::post('/offline-licenses', [OfflineLicenseController::class, 'store'])->name('offline-licenses.store');
 
     // API Documentation (Internal)
     Route::get('/docs', function () {
