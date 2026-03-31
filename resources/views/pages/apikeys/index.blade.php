@@ -24,121 +24,140 @@
 
     <div class="p-8 space-y-8 max-w-7xl mx-auto w-full pb-20">
 
-        <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5 flex gap-4 items-start">
-            <svg class="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-            </svg>
-            <div>
-                <h4 class="text-sm font-semibold text-blue-400 mb-1">Understanding Your Keys</h4>
-                <p class="text-sm text-blue-300/80 leading-relaxed">
-                    Your <strong>API Key</strong> is highly classified and should only be placed in secure <code class="bg-blue-900/50 px-1 rounded">.env</code> files on your server.
-                    To verify signatures in your client applications offline, you must use the specific <strong>Product Certificate (.cert)</strong> available in the Products menu.
-                </p>
-            </div>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        <div class="bg-[#111] border border-gray-800 rounded-2xl p-6 relative overflow-hidden shadow-xl flex items-center justify-between gap-6">
-            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl"></div>
+            <div class="lg:col-span-2 space-y-8">
 
-            <div class="relative z-10 flex-1">
-                <h3 class="text-lg font-bold text-white mb-1">Product Certificates (.cert)</h3>
-                <p class="text-sm text-gray-400 leading-relaxed">
-                    Public keys are no longer generated globally. To implement offline verification within your client SDK, please navigate to the <strong>Products</strong> menu and download the specific <code class="bg-gray-800 text-teal-400 px-1.5 py-0.5 rounded text-xs font-mono">.cert</code> file for each of your applications. This file acts as your application's cryptographic passport.
-                </p>
-            </div>
-            <div class="relative z-10 flex-shrink-0 hidden md:block">
-                <a class="bg-gray-800 hover:bg-gray-700 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all border border-gray-700 whitespace-nowrap flex items-center gap-2 shadow-lg hover:border-gray-600 active:scale-95" href="{{ route("products.index") }}">
-                    Go to Products
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                </a>
-            </div>
-        </div>
+                <div class="bg-[#111] border border-gray-800 rounded-2xl p-6 relative overflow-hidden shadow-xl">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl"></div>
 
-        <div class="bg-[#111] border border-gray-800 rounded-2xl p-6 relative overflow-hidden shadow-xl">
-            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl"></div>
+                    <h3 class="text-lg font-bold text-white mb-2 relative z-10">Generate API Key</h3>
+                    <p class="text-sm text-gray-400 mb-6 relative z-10">Create secret tokens to authenticate your server-side API requests. Give your key a descriptive name.</p>
 
-            <h3 class="text-lg font-bold text-white mb-2 relative z-10">REST API Keys</h3>
-            <p class="text-sm text-gray-400 mb-6 relative z-10">Create secret tokens to authenticate your server-side API requests. Give your key a descriptive name (e.g., Production Server).</p>
-
-            <form action="{{ route("apikeys.store") }}" class="flex flex-col sm:flex-row gap-4 relative z-10" method="POST">
-                @csrf
-                <div class="flex-1">
-                    <input class="block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-white shadow-sm ring-1 ring-inset @error("name") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all" name="name" placeholder="Key Name" required type="text">
-                    @error("name")
-                        <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                    @enderror
+                    <form action="{{ route("apikeys.store") }}" class="flex flex-col sm:flex-row gap-4 relative z-10" method="POST">
+                        @csrf
+                        <div class="flex-1">
+                            <input class="block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-white shadow-sm ring-1 ring-inset @error("name") ring-red-500 focus:ring-red-500 @else ring-gray-800 focus:ring-teal-500 @enderror sm:text-sm sm:leading-6 transition-all" name="name" placeholder="Key Name (e.g., Production Server)" required type="text">
+                            @error("name")
+                                <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <button class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-teal-500/20 whitespace-nowrap flex items-center justify-center gap-2" type="submit">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                            Generate Key
+                        </button>
+                    </form>
                 </div>
-                <button class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-teal-500/20 whitespace-nowrap flex items-center justify-center gap-2" type="submit">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                    Generate Key
-                </button>
-            </form>
-        </div>
 
-        <div class="bg-[#111] border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-gray-400">
-                    <thead class="bg-[#0a0a0a] border-b border-gray-800 text-xs uppercase font-medium text-gray-500 tracking-wider">
-                        <tr>
-                            <th class="px-6 py-4">Name</th>
-                            <th class="px-6 py-4">Secret Token</th>
-                            <th class="px-6 py-4">Created</th>
-                            <th class="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-800">
-                        @forelse ($apiKeys as $key)
-                            <tr class="hover:bg-white/[0.02] transition-colors group">
-                                <td class="px-6 py-4">
-                                    <span class="font-medium text-white flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg>
-                                        {{ $key->name }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="relative group inline-block">
-                                        <div class="inline-flex items-center gap-2 bg-[#0a0a0a] border border-gray-800 rounded-lg px-3 py-1.5 group-hover:border-teal-500/50 transition-colors cursor-pointer" onclick="copyApiKey('{{ $key->token }}', this)">
-                                            <code class="text-teal-400 font-mono text-xs tracking-wider">{{ $key->token }}</code>
-                                            <svg class="w-3.5 h-3.5 text-gray-600 group-hover:text-teal-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-gray-500">
-                                    {{ $key->created_at->format("M d, Y") }}
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <form action="{{ route("apikeys.destroy", $key->id) }}" id="revoke-form-{{ $key->id }}" method="POST">
-                                        @csrf
-                                        @method("DELETE")
-                                        <button class="text-gray-500 hover:text-red-500 font-medium text-xs transition-colors px-3 py-1.5 rounded bg-transparent hover:bg-red-500/10" onclick="openRevokeModal('revoke-form-{{ $key->id }}')" type="button">
-                                            Revoke
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td class="px-6 py-16 text-center" colspan="4">
-                                    <div class="flex flex-col items-center justify-center text-gray-500">
-                                        <svg class="w-12 h-12 mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
-                                        </svg>
-                                        <p class="text-base font-medium text-gray-400 mb-1">No API keys generated</p>
-                                        <p class="text-sm">Create a secret key above to start authenticating your applications.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                <div class="bg-[#111] border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-400">
+                            <thead class="bg-[#0a0a0a] border-b border-gray-800 text-xs uppercase font-medium text-gray-500 tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4">Name</th>
+                                    <th class="px-6 py-4">Secret Token</th>
+                                    <th class="px-6 py-4">Created</th>
+                                    <th class="px-6 py-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                @forelse ($apiKeys as $key)
+                                    <tr class="hover:bg-white/[0.02] transition-colors group">
+                                        <td class="px-6 py-4">
+                                            <span class="font-medium text-white flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                                </svg>
+                                                {{ $key->name }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="relative group inline-block">
+                                                <div class="inline-flex items-center gap-2 bg-[#0a0a0a] border border-gray-800 rounded-lg px-3 py-1.5 group-hover:border-teal-500/50 transition-colors cursor-pointer" onclick="copyApiKey('{{ $key->token }}', this)">
+                                                    <code class="text-teal-400 font-mono text-xs tracking-wider">{{ $key->token }}</code>
+                                                    <svg class="w-3.5 h-3.5 text-gray-600 group-hover:text-teal-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-gray-500">
+                                            {{ $key->created_at->format("M d, Y") }}
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <form action="{{ route("apikeys.destroy", $key->id) }}" id="revoke-form-{{ $key->id }}" method="POST">
+                                                @csrf
+                                                @method("DELETE")
+                                                <button class="text-gray-500 hover:text-red-500 font-medium text-xs transition-colors px-3 py-1.5 rounded bg-transparent hover:bg-red-500/10" onclick="openRevokeModal('revoke-form-{{ $key->id }}')" type="button">
+                                                    Revoke
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td class="px-6 py-16 text-center" colspan="4">
+                                            <div class="flex flex-col items-center justify-center text-gray-500">
+                                                <svg class="w-12 h-12 mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+                                                </svg>
+                                                <p class="text-base font-medium text-gray-400 mb-1">No API keys generated</p>
+                                                <p class="text-sm">Create a secret key above to start authenticating your applications.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="lg:col-span-1 space-y-6">
+
+                <div class="bg-blue-500/5 border border-blue-500/20 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white font-semibold text-sm">Server Authentication</h3>
+                    </div>
+                    <p class="text-xs text-blue-200/70 leading-relaxed mb-3">
+                        Your <strong>API Key</strong> is highly classified. It must only be stored securely in your server's <code class="bg-blue-900/50 px-1 py-0.5 rounded text-[10px] font-mono">.env</code> file.
+                    </p>
+                    <div class="bg-blue-900/20 border border-blue-500/20 rounded-lg p-3 flex gap-2">
+                        <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <p class="text-[11px] text-blue-300/80 leading-snug">Never expose API keys in client-side code, frontend JavaScript, or mobile applications.</p>
+                    </div>
+                </div>
+
+                <div class="bg-teal-500/5 border border-teal-500/20 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-teal-500/20 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white font-semibold text-sm">Client Verification</h3>
+                    </div>
+                    <p class="text-xs text-teal-100/70 leading-relaxed mb-5">
+                        Public keys are not global. To verify signatures offline within your client SDK, download the specific <code class="bg-teal-900/50 text-teal-400 px-1 py-0.5 rounded text-[10px] font-mono">.cert</code> file for each application.
+                    </p>
+                    <a class="w-full bg-[#111] hover:bg-gray-800 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition-all border border-gray-700 flex items-center justify-center gap-2 hover:border-gray-500" href="{{ route("products.index") }}">
+                        Go to Products
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                    </a>
+                </div>
+
             </div>
         </div>
 
