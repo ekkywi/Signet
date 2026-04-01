@@ -15,8 +15,6 @@ return new class extends Migration
             $table->string('key')->unique();
             $table->string('status')->default('active');
             $table->boolean('require_hardware_lock')->default(true);
-            $table->string('hardware_id')->nullable();
-            $table->integer('activations_count')->default(0);
             $table->integer('max_activations')->default(1);
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();

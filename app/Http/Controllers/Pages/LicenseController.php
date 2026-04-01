@@ -3,16 +3,20 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Http\Requests\License\StoreLicenseRequest;
+use App\Http\Requests\License\UpdateLicenseRequest;
+use App\Services\Licenses\LicenseService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use App\Models\Product;
-use App\Models\License;
-use App\Models\LicenseActivation;
 
 class LicenseController extends Controller
 {
+    protected LicenseService $licenseService;
+
+    public function __construct(LicenseService $licenseService)
+    {
+        $this->licenseService = $licenseService;
+    }
+
     public function index()
     {
         /** @var \App\Models\User $user */
@@ -24,49 +28,14 @@ class LicenseController extends Controller
         return view('pages.licenses.index', compact('user', 'workspace', 'products', 'licenses'));
     }
 
-    public function store(Request $request)
+    public function store(StoreLicenseRequest $request)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
+        $license = $this->licenseService->createLicense($workspace, $request->validated());
 
-        $request->validate([
-            'product_id' => [
-                'required',
-                Rule::exists('products', 'id')->where('workspace_id', $workspace->id)
-            ],
-            'max_activations' => ['required', 'integer', 'min:1'],
-            'expires_at' => ['nullable', 'date', 'after:today'],
-        ]);
-
-        $key =
-            Str::upper(Str::random(5)) . '-' .
-            Str::upper(Str::random(5)) . '-' .
-            Str::upper(Str::random(5)) . '-' .
-            Str::upper(Str::random(5)) . '-' .
-            Str::upper(Str::random(5));
-
-        $workspace->licenses()->create([
-            'product_id' => $request->product_id,
-            'key' => $key,
-            'status' => 'active',
-            'require_hardware_lock' => $request->has('require_hardware_lock'),
-            'max_activations' => $request->max_activations,
-            'expires_at' => $request->expires_at,
-        ]);
-
-        return back()->with('success', 'License key generated: ' . $key);
-    }
-
-    public function destroy($id)
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $workspace = $user->workspaces()->first();
-        $license = $workspace->licenses()->where('id', $id)->firstOrFail();
-        $license->delete();
-
-        return back()->with('success', 'License revoked and deleted.');
+        return back()->with('success', 'License key generated: ' . $license->key);
     }
 
     public function show($id)
@@ -74,14 +43,35 @@ class LicenseController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
-        $license = $workspace->licenses()
+        $license = $workspace->licences()
             ->with(['product', 'activations' => function ($query) {
                 $query->latest('last_active_at');
             }])
-            ->where('id', $id)
-            ->firstOrFail();
+            ->findOrFail($id);
 
         return view('pages.licenses.show', compact('user', 'workspace', 'license'));
+    }
+
+    public function update(UpdateLicenseRequest $request, $id)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
+
+        $this->licenseService->updateLicense($workspace, $id, $request->validated());
+
+        return back()->with('success', 'License expiration date updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $workspace = $user->workspaces()->first();
+
+        $this->licenseService->deleteLicense($workspace, $id);
+
+        return back()->with('success', 'License revoked and deleted successfully.');
     }
 
     public function revokeDevice($id)
@@ -89,32 +79,9 @@ class LicenseController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
-        $activation = LicenseActivation::whereHas('license', function ($query) use ($workspace) {
-            $query->where('workspace_id', $workspace->id);
-        })->where('id', $id)->firstOrFail();
 
-        $license = $activation->license;
-        $activation->delete();
-        $license->decrement('activations_count');
+        $this->licenseService->revokeDevice($workspace, $id);
 
-        return back()->with('success', 'Device has been successfully revoked. The activation slot is now free.');
-    }
-
-    public function update(Request $request, $id)
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $workspace = $user->workspaces()->first();
-        $license = $workspace->licenses()->findOrFail($id);
-
-        $request->validate([
-            'expires_at' => ['nullable', 'date', 'after:today'],
-        ]);
-
-        $license->update([
-            'expires_at' => $request->expires_at,
-        ]);
-
-        return back()->with('success', 'License expiration data updated successfully.');
+        return back()->with('success', 'Device has been successfully revoked. The license can now be activated on another device.');
     }
 }

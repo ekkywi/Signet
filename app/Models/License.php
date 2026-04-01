@@ -15,8 +15,6 @@ class License extends Model
         'key',
         'status',
         'require_hardware_lock',
-        'hardware_id',
-        'activations_count',
         'max_activations',
         'expires_at',
     ];

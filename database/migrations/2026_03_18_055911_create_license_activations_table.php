@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('license_activations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('license_id')->constrained()->cascadeOnDelete();
-            $table->string('hardware_identifier');
+            $table->string('hardware_id');
             $table->string('device_name')->nullable();
             $table->timestamp('last_active_at')->useCurrent();
             $table->timestamps();
-            $table->unique(['license_id', 'hardware_identifier']);
+            $table->unique(['license_id', 'hardware_id']);
         });
     }
 

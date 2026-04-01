@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $workspace = $user->workspace()->first();
+        $workspace = $user->workspaces()->first();
         $products = Product::where('workspace_id', $workspace->id)->withCount('licenses')->get();
 
         return view('pages.products.index', compact('user', 'workspace', 'products'));

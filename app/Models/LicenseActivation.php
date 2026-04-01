@@ -11,7 +11,7 @@ class LicenseActivation extends Model
 
     protected $fillable = [
         'license_id',
-        'hardware_identifier',
+        'hardware_id',
         'device_name',
         'last_active_at'
     ];
