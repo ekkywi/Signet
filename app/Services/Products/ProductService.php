@@ -22,11 +22,14 @@ class ProductService
     public function createProduct(Workspace $workspace, array $data): Product
     {
         $hsmResponse = $this->hsmService->generateProductIdentity([
-            'product_name' => $data['name'],
-            'organization' => 'Signet Cloud KMS',
+            'cmd' => 'GEN_KEY',
+            'data' => [
+                'product_name' => $data['name'],
+                'organization' => 'Signet Cloud KMS',
+            ]
         ]);
 
-        if (!$hsmResponse || !isset($hsmResponse['data']['raw_private_key']) || !isset($hsmResponse['data']['certificate'])) {
+        if (!$hsmResponse || !isset($hsmResponse['data']['wrapped_private_key']) || !isset($hsmResponse['data']['certificate'])) {
             Log::error('[HSM PARSE ERROR] Invalid or incomplete JSON structure from Hardware.', [
                 'product_name' => $data['name'],
             ]);
@@ -37,7 +40,7 @@ class ProductService
             'name' => $data['name'],
             'slug' => Str::slug($data['name']) . '-' . Str::random(5),
             'description' => $data['description'] ?? null,
-            'private_key' => Crypt::encryptString($hsmResponse['data']['raw_private_key']),
+            'wrapped_private_key' => $hsmResponse['data']['wrapped_private_key'],
             'certificate' => $hsmResponse['data']['certificate'],
         ]);
 

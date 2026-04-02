@@ -15,7 +15,7 @@ class Product extends Model
         'name',
         'slug',
         'description',
-        'private_key',
+        'wrapped_private_key',
         'certificate',
     ];
 

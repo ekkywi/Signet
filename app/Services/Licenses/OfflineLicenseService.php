@@ -23,11 +23,11 @@ class OfflineLicenseService
         $license = License::with('product')->where('key', $licenseKey)->first();
 
         if (!$license) {
-            throw new Exception('License not found in the system');
+            throw new Exception('License not found in the system.');
         }
 
         if ($license->status !== 'active') {
-            throw new Exception('License is not active or has been revoked');
+            throw new Exception('License is not active or has been revoked.');
         }
 
         $existingActivation = $license->activations()->where('hardware_id', $hardwareId)->first();
@@ -54,15 +54,29 @@ class OfflineLicenseService
 
         ksort($payload);
 
-        $privateKey = $license->product->private_key;
+        $jsonPayloadString = json_encode($payload);
 
-        $signature = Cache::lock('hsm-usb-lock', 15)->block(15, function () use ($payload, $privateKey) {
-            return $this->hsmService->signPayLoad($payload, $privateKey);
+        $wrappedKey = $license->product->wrapped_private_key;
+
+        $signature = Cache::lock('hsm-usb-lock', 15)->block(15, function () use ($jsonPayloadString, $wrappedKey) {
+
+            $hsmResponse = $this->hsmService->signPayLoad([
+                'cmd' => 'SIGN_DATA',
+                'data' => [
+                    'wrapped_private_key' => $wrappedKey,
+                    'payload' => $jsonPayloadString
+                ]
+            ]);
+
+            if (!$hsmResponse || $hsmResponse['status'] !== 'OK') {
+                return null;
+            }
+
+            return $hsmResponse['data']['signature'];
         });
 
         if (!$signature) {
-            Log::error('[OFFLINE LICENSE] Failed to get signature form Hardware Security Module (HSM) for license key: ' . $license->id);
-            throw new Exception('Connection to Cryptographic Hardware is failed or lost.');
+            Log::error('[OFFLINE LICENSE] HSM Error or Timeout for license key: ' . $license->id);
         }
 
         $fileName = 'license_' . substr($hardwareId, 0, 8) . '.json';

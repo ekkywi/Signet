@@ -26,13 +26,10 @@ class HsmService
         }
     }
 
-    public function generateProductIdentity(array $data)
+    public function generateProductIdentity(array $requestData)
     {
         try {
-            $response = Http::timeout(30)->post("{$this->baseUrl}/api/hsm/generate-identity", [
-                'command' => 'GENERATE_IDENTITY',
-                'data' => $data,
-            ]);
+            $response = Http::timeout(30)->post("{$this->baseUrl}/api/hsm/generate-identity", $requestData);
 
             if ($response->successful()) {
                 return $response->json();
@@ -46,22 +43,13 @@ class HsmService
         }
     }
 
-    public function signPayLoad(array $payload, string $privateKey)
+    public function signPayLoad(array $requestData)
     {
         try {
-            ksort($payload);
-
-            $payloadString = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-            $response = Http::timeout(10)->post("{$this->baseUrl}/api/hsm/sign", [
-                'command' => 'SIGN_PAYLOAD',
-                'privateKey' => $privateKey,
-                'payload' => $payloadString,
-            ]);
+            $response = Http::timeout(15)->post("{$this->baseUrl}/api/hsm/sign", $requestData);
 
             if ($response->successful()) {
-                $result = $response->json();
-                return $result['data']['signature'] ?? null;
+                return $response->json();
             }
 
             Log::error('[HSM SIGN ERROR] Failed to sign payload. Response: ' . $response->body());
