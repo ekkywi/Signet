@@ -1,0 +1,26 @@
+# Version control
+.git
+.gitignore
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+node_modules/
+
+# IDE & OS
+.idea/
+.vscode/
+*.DS_Store
+
+# Logs & Cache
+storage/logs/*
+bootstrap/cache/*
+public/storage
+*.log
+
+# Docker Compose files
+docker-compose*.yml

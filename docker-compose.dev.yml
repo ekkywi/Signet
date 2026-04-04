@@ -4,18 +4,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+      target: development
+      network: host
     container_name: signet-app
     restart: unless-stopped
     working_dir: /var/www
     volumes:
-      - ./storage:/var/www/storage
+      - ./:/var/www
       - ./bootstrap/cache:/var/www/bootstrap/cache
     ports:
       - "8888:8000"
       - "5173:5173"
     environment:
-      - APP_ENV=production
+      - APP_ENV=local
     env_file:
       - .env
     depends_on:
@@ -28,7 +29,7 @@ services:
     networks:
       - internal
       - public
-    command: php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000
+    command: zsh -c "php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000 --watch"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/up"]
       interval: 30s
@@ -40,7 +41,6 @@ services:
     build:
       context: ./hsm-bridge
       dockerfile: Dockerfile
-      network: host
     container_name: signet-hsm
     restart: unless-stopped
     privileged: false
@@ -71,9 +71,8 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - db_data:/var/lib/postgresql/data
-    # local debugging: uncomment this if you need to connect from host, but be sure to secure it properly (e.g. bind to localhost only, use strong password, etc.)
-    # ports:
-    #   - "127.0.0.1:5434:5432"
+    ports:
+      - "127.0.0.1:5434:5432"
     networks:
       - internal
     healthcheck:
