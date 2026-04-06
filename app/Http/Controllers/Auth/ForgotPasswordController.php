@@ -3,25 +3,27 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Services\Auth\AuthService;
 use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function index()
     {
         return view('auth.forgot-password');
     }
 
-    public function store(Request $request)
+    public function store(ForgotPasswordRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
-
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = $this->authService->sendPasswordResetLink($request->only('email'));
 
         if ($status === Password::RESET_LINK_SENT) {
             return back()->with('status', 'We have emailed your password reset link!');

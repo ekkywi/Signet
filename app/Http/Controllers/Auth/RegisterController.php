@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Models\User;
-use App\Models\Workspace;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
+use App\Services\Auth\AuthService;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function index()
     {
         return view('auth.register');
@@ -21,31 +24,17 @@ class RegisterController extends Controller
     public function store(RegisterRequest $request)
     {
         try {
-            DB::beginTransaction();
+            $this->authService->registerUser($request->validated());
 
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+            session()->put('registered_email', $request->email);
 
-            $firstName = explode(' ', trim($request->name))[0];
-
-            Workspace::create([
-                'user_id' => $user->id,
-                'name' => $firstName . "'s Workspace",
-            ]);
-
-            DB::commit();
-
-            Auth::login($user);
-
-            return redirect()->route('verification.notice');
+            return redirect()->route('verification.notice')
+                ->with('status', 'Registration successful! Please check your email to verify your account.');
         } catch (\Throwable $e) {
-            DB::rollBack();
+            Log::error('Registration failed: ' . $e->getMessage());
 
             return back()->withInput()->withErrors([
-                'email' => 'Failed to create account. Please try again later.',
+                'email' => 'Failed to register. Please try again later.',
             ]);
         }
     }

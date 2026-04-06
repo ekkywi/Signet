@@ -7,14 +7,12 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Pages\ApiKeyController;
 use App\Http\Controllers\Pages\ProductController;
 use App\Http\Controllers\Pages\LicenseController;
 use App\Http\Controllers\Pages\OfflineLicenseController;
 use App\Http\Controllers\Pages\ProfileController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +24,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/help', function () {
     return view('pages.public-docs');
 })->name('help.index');
+
+// Email Verification
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware('signed')->name('verification.verify');
+Route::post('/email/resend-verification', [VerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.send');
 
 
 /*
@@ -47,6 +49,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('throttle:3,1')->name('password.email');
     Route::get('/reset-password/{token}', [ResetPasswordController::class, 'index'])->name('password.reset');
     Route::post('/reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
+
+    // Email Verification Notice
+    Route::get('/email/verify-notice', [VerificationController::class, 'showNotice'])->name('verification.notice');
 });
 
 
@@ -57,22 +62,7 @@ Route::middleware('guest')->group(function () {
 */
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
-
-    Route::get('/email/verify', function () {
-        return view('auth.verify-email');
-    })->name('verification.notice');
-
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        return redirect('/dashboard')->with('success', 'Email verified! Your workspace is ready to use.');
-    })->middleware(['signed'])->name('verification.verify');
-
-    Route::post('/email/verification-notification', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('status', 'verification-link-sent');
-    })->middleware(['throttle:6,1'])->name('verification.send');
 });
-
 
 /*
 |--------------------------------------------------------------------------

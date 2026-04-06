@@ -24,6 +24,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zsh git zip unzip udev \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Node.js for Octane --watch and Vite
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs
+
 # Zsh setup for root and www-data
 RUN usermod -s /usr/bin/zsh root \
     && usermod -s /usr/bin/zsh www-data

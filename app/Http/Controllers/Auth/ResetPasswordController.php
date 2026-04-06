@@ -4,21 +4,25 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\Auth\AuthService;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Str;
-use App\Models\User;
 
 class ResetPasswordController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function index(Request $request, $token)
     {
         $email = $request->string('email')->toString();
 
-        $user = User::where('email', $email)->first();
 
-        if (!$user || ! Password::broker()->tokenExists($user, $token)) {
+        if (!$this->authService->isValidResetToken($email, $token)) {
             return redirect()->route('password.request')->withErrors(['email' => 'This password reset link is invalid or has expired. Please request a new one.']);
         }
 
@@ -28,26 +32,10 @@ class ResetPasswordController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', 'min:12'],
-        ]);
-
-        $status = Password::reset(
+        $status = $this->authService->resetPassword(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password),
-                ])->setRememberToken(Str::random(60));
-
-                $user->save();
-
-                event(new PasswordReset($user));
-            }
         );
 
         if ($status === Password::PASSWORD_RESET) {
