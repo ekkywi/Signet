@@ -12,6 +12,22 @@
                 </div>
             @endif
 
+            @if (session("new_api_key"))
+                <div class="mb-6 bg-yellow-500/10 border border-yellow-500/50 p-6 rounded-xl shadow-lg shadow-yellow-500/10 animate-fade-in-down">
+                    <h3 class="text-lg font-bold text-yellow-500 mb-2">PENTING: Salin API Key Anda Sekarang!</h3>
+                    <p class="text-sm text-yellow-200/80 mb-4">
+                        Demi keamanan, kami tidak menyimpan API Key ini dalam bentuk teks biasa. <strong>Ini adalah satu-satunya kesempatan Anda melihatnya.</strong> Jika Anda kehilangannya, Anda harus menghapus dan membuat kunci baru.
+                    </p>
+
+                    <div class="flex items-center gap-3 bg-[#0a0a0a] border border-yellow-500/30 p-3 rounded-lg">
+                        <code class="text-yellow-400 font-mono text-sm tracking-wider flex-1 select-all" id="new-api-key-text">{{ session("new_api_key") }}</code>
+                        <button class="bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-400 px-4 py-2 rounded-md text-xs font-bold transition-colors" onclick="copyApiKey('{{ session("new_api_key") }}', this)">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            @endif
+
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold text-white tracking-tight">API & Security Credentials</h2>
@@ -75,11 +91,8 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="relative group inline-block">
-                                                <div class="inline-flex items-center gap-2 bg-[#0a0a0a] border border-gray-800 rounded-lg px-3 py-1.5 group-hover:border-teal-500/50 transition-colors cursor-pointer" onclick="copyApiKey('{{ $key->token }}', this)">
-                                                    <code class="text-teal-400 font-mono text-xs tracking-wider">{{ $key->token }}</code>
-                                                    <svg class="w-3.5 h-3.5 text-gray-600 group-hover:text-teal-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                                    </svg>
+                                                <div class="inline-flex items-center gap-2 bg-[#0a0a0a]/50 border border-gray-800/50 rounded-lg px-3 py-1.5 cursor-not-allowed">
+                                                    <code class="text-gray-500 font-mono text-xs tracking-wider">sgnt_live_••••••••••••••••••••••••••••••••</code>
                                                 </div>
                                             </div>
                                         </td>

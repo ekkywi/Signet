@@ -3,12 +3,21 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ApiKeys\StoreApiKeyRequest;
+use App\Services\ApiKeys\ApiKeyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 class ApiKeyController extends Controller
 {
+    protected $apiKeyService;
+
+    public function __construct(ApiKeyService $apiKeyService)
+    {
+        $this->apiKeyService = $apiKeyService;
+    }
+
     public function index()
     {
         /** @var \App\Models\User $user */
@@ -19,22 +28,17 @@ class ApiKeyController extends Controller
         return view('pages.apikeys.index', compact('user', 'workspace', 'apiKeys'));
     }
 
-    public function store(Request $request)
+    public function store(StoreApiKeyRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-        ]);
-
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
-        $token = 'sgnt_live_' . Str::random(40);
-        $workspace->apiKeys()->create([
-            'name' => $request->name,
-            'token' => $token,
-        ]);
 
-        return back()->with('success', 'New API key generated successfully.');
+        $rawToken = $this->apiKeyService->createApiKey($workspace, $request->validated());
+
+        return back()
+            ->with('success', 'New API key generated successfully.')
+            ->with('new_api_key', $rawToken);
     }
 
     public function destroy($id)
@@ -42,8 +46,8 @@ class ApiKeyController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
-        $apiKey = $workspace->apiKeys()->where('id', $id)->firstOrFail();
-        $apiKey->delete();
+
+        $this->apiKeyService->deleteApiKey($workspace, $id);
 
         return back()->with('success', 'API Key revoked successfully.');
     }
