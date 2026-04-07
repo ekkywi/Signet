@@ -111,7 +111,16 @@
                                     {{ $device->device_name }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <code class="text-xs bg-gray-800/50 px-2 py-1 rounded text-gray-300">{{ $device->hardware_identifier }}</code>
+                                    <div class="flex items-center gap-2">
+                                        <code class="text-xs bg-gray-800/50 border border-gray-700/50 px-2 py-1 rounded text-gray-300 font-mono" title="{{ $device->hardware_id }}">
+                                            {{ Str::limit($device->hardware_id, 16) }}
+                                        </code>
+                                        <button class="text-gray-500 hover:text-white transition-colors" onclick="copyToClipboard('{{ $device->hardware_id }}', this)" title="Copy Full HWID">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-xs text-gray-500">
                                     {{ $device->last_active_at->diffForHumans() }}
@@ -272,6 +281,24 @@
             setTimeout(() => {
                 editModal.classList.add('hidden');
             }, 300);
+        }
+
+        function copyToClipboard(text, buttonElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalContent = buttonElement.innerHTML;
+
+                buttonElement.innerHTML = `
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                `;
+
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalContent;
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
         }
     </script>
 </x-layouts.app>

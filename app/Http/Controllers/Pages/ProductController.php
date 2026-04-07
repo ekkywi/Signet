@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
-use App\Models\Product;
 use App\Services\Products\ProductService;
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -23,7 +22,7 @@ class ProductController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
-        $products = Product::where('workspace_id', $workspace->id)->withCount('licenses')->get();
+        $products = $workspace->products()->withCount('licenses')->get();
 
         return view('pages.products.index', compact('user', 'workspace', 'products'));
     }

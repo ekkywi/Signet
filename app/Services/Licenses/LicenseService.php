@@ -11,17 +11,16 @@ class LicenseService
 {
     public function createLicense(Workspace $workspace, array $data): License
     {
-        $key = strtoupper(Str::random(5)) . '-' .
-            strtoupper(Str::random(5)) . '-' .
-            strtoupper(Str::random(5)) . '-' .
-            strtoupper(Str::random(5)) . '-' .
-            strtoupper(Str::random(5));
+        $pool = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+
+        $randomString = substr(str_shuffle(str_repeat($pool, 5)), 0, 25);
+        $key = implode('-', str_split($randomString, 5));
 
         return $workspace->licenses()->create([
             'product_id' => $data['product_id'],
             'key' => $key,
             'status' => 'active',
-            'require_hardware_lock' => isset($data['require_hardware_lock']) ? true : false,
+            'require_hardware_lock' => $data['require_hardware_lock'] ?? false,
             'max_activations' => $data['max_activations'],
             'expires_at' => $data['expires_at'],
         ]);

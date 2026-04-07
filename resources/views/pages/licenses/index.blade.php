@@ -43,8 +43,14 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-2">Max Devices</label>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Max Devices (Activations)</label>
                         <input class="block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-white ring-1 ring-inset ring-gray-800 focus:ring-teal-500 transition-all" min="1" name="max_activations" required type="number" value="1">
+                        <p class="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                            During Beta, floating licenses (max devices > 1) are unlimited.
+                        </p>
                     </div>
 
                     <div>

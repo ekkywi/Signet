@@ -12,9 +12,11 @@ class ApiKeyService
     {
         $rawToken = 'sgnt_live_' . Str::random(40);
         $hashedToken = hash('sha256', $rawToken);
+        $lastChars = substr($rawToken, -4);
         $workspace->apiKeys()->create([
-            'name'  => $data['name'],
-            'token' => $hashedToken,
+            'name'       => $data['name'],
+            'token'      => $hashedToken,
+            'last_chars' => $lastChars,
         ]);
 
         return $rawToken;

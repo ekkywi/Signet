@@ -25,7 +25,14 @@ class StoreLicenseRequest extends FormRequest
             ],
             'max_activations' => ['required', 'integer', 'min:1'],
             'expires_at' => ['nullable', 'date', 'after:today'],
-            'require_hardware_lock' => ['nullable'],
+            'require_hardware_lock' => ['boolean'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'require_hardware_lock' => $this->boolean('require_hardware_lock'),
+        ]);
     }
 }

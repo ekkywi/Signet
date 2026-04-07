@@ -12,6 +12,7 @@ use App\Http\Controllers\Pages\ApiKeyController;
 use App\Http\Controllers\Pages\ProductController;
 use App\Http\Controllers\Pages\LicenseController;
 use App\Http\Controllers\Pages\OfflineLicenseController;
+use App\Http\Controllers\Pages\AuditLogController;
 use App\Http\Controllers\Pages\ProfileController;
 
 /*
@@ -96,6 +97,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Offline Licenses Management
     Route::get('/offline-licenses', [OfflineLicenseController::class, 'index'])->name('offline-licenses.index');
     Route::post('/offline-licenses', [OfflineLicenseController::class, 'store'])->name('offline-licenses.store');
+
+    // Audit Logs
+    Route::get('/logs', [AuditLogController::class, 'index'])->name('logs.index');
 
     // API Documentation (Internal)
     Route::get('/docs', function () {

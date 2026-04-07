@@ -50,7 +50,7 @@
                                     Machine Fingerprint <span class="text-gray-600 font-normal">(Hardware ID)</span>
                                 </label>
                                 <div class="relative">
-                                    <input class="appearance-none block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-teal-400 font-mono tracking-wide ring-1 ring-inset ring-gray-800 focus:ring-teal-500 transition-all sm:text-sm" id="hardware_id" name="hardware_id" placeholder="Enter the 64-character hash..." required type="text" value="{{ old("hardware_id") }}">
+                                    <input class="appearance-none block w-full rounded-xl border-0 bg-[#0a0a0a] px-4 py-3 text-teal-400 font-mono tracking-wide ring-1 ring-inset ring-gray-800 focus:ring-teal-500 focus:ring-2 transition-all sm:text-sm" id="hardware_id" minlength="32" name="hardware_id" pattern="[a-zA-Z0-9]+" placeholder="e.g. e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" required title="Hardware ID must be a valid alphanumeric hash" type="text" value="{{ old("hardware_id") }}">
                                 </div>
                                 <p class="mt-2 text-xs text-gray-600">The unique identifier extracted from the client's offline machine.</p>
                             </div>

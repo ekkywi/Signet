@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignUuid('workspace_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('token')->unique();
+            $table->string('last_chars', 4)->nullable();
             $table->timestamp('last_used_at')->nullable();
             $table->timestamps();
         });

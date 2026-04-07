@@ -43,7 +43,7 @@ class LicenseController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $workspace = $user->workspaces()->first();
-        $license = $workspace->licences()
+        $license = $workspace->licenses()
             ->with(['product', 'activations' => function ($query) {
                 $query->latest('last_active_at');
             }])
