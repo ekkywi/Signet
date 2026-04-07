@@ -46,10 +46,10 @@ services:
     privileged: false
     cap_add:
       - SYS_RAWIO
-    # devices:
-    # - "/dev/ttyUSB0:/dev/ttyUSB0"
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
     environment:
-      - SERIAL_PORT=/dev/ttyUSB0
+      - SERIAL_PORT=/dev/ttyACM0
       - NODE_ENV=production
     networks:
       - internal

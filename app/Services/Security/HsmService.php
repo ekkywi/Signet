@@ -2,61 +2,55 @@
 
 namespace App\Services\Security;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Exception;
 
 class HsmService
 {
-    protected string $baseUrl;
+    protected string $baseUrl = 'http://hsm:3000/api/hsm';
 
-    public function __construct()
-    {
-        $this->baseUrl = config('services.hsm.url', 'http://hsm:3000');
-    }
-
-    public function isAlive(): bool
+    public function generateProductIdentity(string $productName): array
     {
         try {
-            $response = Http::timeout(15)->get("{$this->baseUrl}/api/hsm/status");
-            return $response->successful();
+            $response = Http::timeout(30)->post("{$this->baseUrl}/generate", [
+                'product_name' => $productName
+            ]);
+
+            if ($response->failed() || $response->json('status') !== 'success') {
+                throw new Exception("HSM API Error: " . ($response->json('message') ?? 'Unknown error'));
+            }
+
+            $data = $response->json('data');
+
+            return [
+                'wrapped_private_key' => $data['wrapped_private_key'],
+                'certificate'         => $data['certificate']
+            ];
         } catch (Exception $e) {
-            Log::warning('[HSM CHECK] Micro HSM is unreachable: ' . $e->getMessage());
-            return false;
+            Log::error("HSM Generation Failed: " . $e->getMessage());
+            throw new Exception("Failed to communicate with HSM for product identity generation.");
+            // throw new Exception("HSM ERROR ASLI: " . $e->getMessage());
         }
     }
 
-    public function generateProductIdentity(array $requestData)
+    public function signLicense(string $wrappedKey, string $payloadString): string
     {
         try {
-            $response = Http::timeout(30)->post("{$this->baseUrl}/api/hsm/generate-identity", $requestData);
+            $response = Http::timeout(30)->post("{$this->baseUrl}/sign", [
+                'wrapped_private_key' => $wrappedKey,
+                'payload'             => $payloadString
+            ]);
 
-            if ($response->successful()) {
-                return $response->json();
+            if ($response->failed() || $response->json('status') !== 'success') {
+                throw new Exception("HSM API Error: " . ($response->json('message') ?? 'Unknown error'));
             }
 
-            Log::error('[HSM PKI ERROR] Failed to generate identity. Response: ' . $response->body());
-            return null;
+            return $response->json('data')['signature'];
         } catch (Exception $e) {
-            Log::error('[HSM PKI ERROR] Connection to Node.js bridge failed: ' . $e->getMessage());
-            return null;
-        }
-    }
-
-    public function signPayLoad(array $requestData)
-    {
-        try {
-            $response = Http::timeout(15)->post("{$this->baseUrl}/api/hsm/sign", $requestData);
-
-            if ($response->successful()) {
-                return $response->json();
-            }
-
-            Log::error('[HSM SIGN ERROR] Failed to sign payload. Response: ' . $response->body());
-            return null;
-        } catch (Exception $e) {
-            Log::error('[HSM SIGN ERROR] Connection to Node.js bridge failed: ' . $e->getMessage());
-            return null;
+            Log::error("HSM Signing Failed: " . $e->getMessage());
+            throw new Exception("Failed to sign license via HSM.");
+            // throw new Exception("HSM ERROR ASLI: " . $e->getMessage());
         }
     }
 }

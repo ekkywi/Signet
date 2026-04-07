@@ -3,10 +3,10 @@ const { SerialPort } = require("serialport");
 const { ReadlineParser } = require("@serialport/parser-readline");
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 const PORT_PATH = process.env.SERIAL_PORT || "/dev/ttyUSB0";
-const BAUD_RATE = 115200;
+const BAUD_RATE = 2000000;
 const HTTP_PORT = 3000;
 
 let port, parser;
@@ -16,138 +16,151 @@ const taskQueue = [];
 let isProcessing = false;
 
 function initSerial() {
-  port = new SerialPort({ path: PORT_PATH, baudRate: BAUD_RATE }, (err) => {
-    if (err) {
-      console.error("[HSM ERROR]", err.message);
-      isPortOpen = false;
-      setTimeout(initSerial, 5000);
-      return;
-    }
-    console.log(`[HSM SECURE] Connected to Micro HSM on ${PORT_PATH}`);
-    isPortOpen = true;
-  });
+    port = new SerialPort({ path: PORT_PATH, baudRate: BAUD_RATE }, (err) => {
+        if (err) {
+            console.error("[HSM ERROR]", err.message);
+            isPortOpen = false;
+            setTimeout(initSerial, 5000);
+            return;
+        }
+        console.log(
+            `[HSM SECURE] Connected to Micro HSM on ${PORT_PATH} at ${BAUD_RATE} bps`,
+        );
+        isPortOpen = true;
+    });
 
-  parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+    parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
 
-  parser.on("data", (data) => {
-    const rawResponse = data.trim();
-    console.log(`[ESP32 SAYS] ${rawResponse}`);
+    parser.on("data", (data) => {
+        const rawResponse = data.trim();
 
-    if (taskQueue.length > 0 && isProcessing) {
-      const currentTask = taskQueue[0];
-      clearTimeout(currentTask.timeoutTimer);
+        console.log(
+            `[ESP32 SAYS] Response length: ${rawResponse.length} chars`,
+        );
 
-      try {
-        const parsedResponse = JSON.parse(rawResponse);
-        currentTask.resolve(parsedResponse);
-      } catch (e) {
-        currentTask.reject({
-          status: "error",
-          message: "Invalid JSON from HSM",
-          raw: rawResponse,
-        });
-      }
+        if (taskQueue.length > 0 && isProcessing) {
+            const currentTask = taskQueue[0];
+            clearTimeout(currentTask.timeoutTimer);
 
-      taskQueue.shift();
-      isProcessing = false;
-      processNextTask();
-    }
-  });
+            try {
+                const parsedResponse = JSON.parse(rawResponse);
+                currentTask.resolve(parsedResponse);
+            } catch (e) {
+                currentTask.reject({
+                    status: "error",
+                    message: "Invalid JSON from HSM",
+                    raw: rawResponse,
+                });
+            }
 
-  port.on("close", () => {
-    console.log(`[HSM WARNING] Connection lost. Reconnecting...`);
-    isPortOpen = false;
-    setTimeout(initSerial, 5000);
-  });
+            taskQueue.shift();
+            isProcessing = false;
+            processNextTask();
+        }
+    });
+
+    port.on("close", () => {
+        console.log(`[HSM WARNING] Connection lost. Reconnecting...`);
+        isPortOpen = false;
+        setTimeout(initSerial, 5000);
+    });
 }
 
 function processNextTask() {
-  if (taskQueue.length === 0 || isProcessing || !isPortOpen) return;
+    if (taskQueue.length === 0 || isProcessing || !isPortOpen) return;
 
-  isProcessing = true;
-  const currentTask = taskQueue[0];
+    isProcessing = true;
+    const currentTask = taskQueue[0];
 
-  currentTask.timeoutTimer = setTimeout(() => {
-    console.error("[HSM TIMEOUT] ESP32 did not respond within 20 seconds!");
-    currentTask.reject({
-      status: "error",
-      message: "HSM Hardware Timeout (Key Generation took too long)",
+    currentTask.timeoutTimer = setTimeout(() => {
+        console.error("[HSM TIMEOUT] ESP32 did not respond within 20 seconds!");
+        currentTask.reject({
+            status: "error",
+            message: "HSM Hardware Timeout",
+        });
+        taskQueue.shift();
+        isProcessing = false;
+        processNextTask();
+    }, 20000);
+
+    const payloadString = JSON.stringify(currentTask.payload) + "\n";
+    console.log(`[HSM SEND] Sending command: ${currentTask.payload.cmd}`);
+
+    port.write(payloadString, (err) => {
+        if (err) {
+            clearTimeout(currentTask.timeoutTimer);
+            currentTask.reject({
+                status: "error",
+                message: "Failed to write to Serial Port",
+            });
+            taskQueue.shift();
+            isProcessing = false;
+            processNextTask();
+        }
     });
-    taskQueue.shift();
-    isProcessing = false;
-    processNextTask();
-  }, 20000);
-
-  console.log(`[HSM SEND] Sending payload...`);
-
-  port.write(JSON.stringify(currentTask.payload) + "\n", (err) => {
-    if (err) {
-      clearTimeout(currentTask.timeoutTimer);
-      currentTask.reject({
-        status: "error",
-        message: "Failed to write to Serial Port",
-      });
-      taskQueue.shift();
-      isProcessing = false;
-      processNextTask();
-    }
-  });
 }
 
 app.get("/api/hsm/status", (req, res) => {
-  if (!isPortOpen) return res.status(503).json({ status: "offline" });
-  new Promise((resolve, reject) => {
-    taskQueue.push({ payload: { action: "PING" }, resolve, reject });
-    processNextTask();
-  })
-    .then((r) => res.json(r))
-    .catch((e) => res.status(500).json(e));
+    if (!isPortOpen) return res.status(503).json({ status: "offline" });
+
+    return res.json({
+        status: "success",
+        message: "Bridge & Serial Connected",
+    });
 });
 
-app.post("/api/hsm/generate-identity", (req, res) => {
-  if (!isPortOpen) return res.status(503).json({ status: "offline" });
-  new Promise((resolve, reject) => {
-    taskQueue.push({
-      payload: req.body,
-      resolve,
-      reject,
-    });
-    processNextTask();
-  })
-    .then((r) => res.json(r))
-    .catch((e) => res.status(500).json(e));
+app.post("/api/hsm/generate", (req, res) => {
+    if (!isPortOpen) return res.status(503).json({ status: "offline" });
+
+    const productName = req.body.product_name || "Signet App";
+
+    const hsmPayload = {
+        cmd: "GEN_KEY",
+        data: {
+            product_name: productName,
+        },
+    };
+
+    new Promise((resolve, reject) => {
+        taskQueue.push({ payload: hsmPayload, resolve, reject });
+        processNextTask();
+    })
+        .then((r) => res.json(r))
+        .catch((e) => res.status(500).json(e));
 });
 
 app.post("/api/hsm/sign", (req, res) => {
-  if (!isPortOpen) return res.status(503).json({ status: "offline" });
+    if (!isPortOpen) return res.status(503).json({ status: "offline" });
 
-  if (!req.body.cmd || !req.body.data) {
-    return res.status(400).json({
-      status: "error",
-      message: "Invalid Payload Structure (Missing cmd or data)",
-    });
-  }
+    if (!req.body.wrapped_private_key || !req.body.payload) {
+        return res.status(400).json({
+            status: "error",
+            message: "Missing wrapped_private_key or payload",
+        });
+    }
 
-  new Promise((resolve, reject) => {
-    taskQueue.push({
-      payload: req.body,
-      resolve,
-      reject,
-    });
-    processNextTask();
-  })
-    .then((result) => {
-      res.json(result);
+    const hsmPayload = {
+        cmd: "SIGN_DATA",
+        data: {
+            wrapped_private_key: req.body.wrapped_private_key,
+            payload: req.body.payload,
+        },
+    };
+
+    new Promise((resolve, reject) => {
+        taskQueue.push({ payload: hsmPayload, resolve, reject });
+        processNextTask();
     })
-    .catch((error) => {
-      console.error("[Node.js Bridge] Sign Error:", error);
-      res.status(500).json(error);
-    });
+        .then((result) => res.json(result))
+        .catch((error) => {
+            console.error("[Node.js Bridge] Sign Error:", error);
+            res.status(500).json(error);
+        });
 });
 
 app.listen(HTTP_PORT, "0.0.0.0", () => {
-  console.log(
-    `[BRIDGE READY] HSM Bridge Daemon listening on port ${HTTP_PORT}`,
-  );
-  initSerial();
+    console.log(
+        `[BRIDGE READY] HSM Bridge Daemon listening on port ${HTTP_PORT}`,
+    );
+    initSerial();
 });

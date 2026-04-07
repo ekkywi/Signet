@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\Workspace;
 use App\Services\Security\HsmService;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
@@ -21,16 +20,10 @@ class ProductService
 
     public function createProduct(Workspace $workspace, array $data): Product
     {
-        $hsmResponse = $this->hsmService->generateProductIdentity([
-            'cmd' => 'GEN_KEY',
-            'data' => [
-                'product_name' => $data['name'],
-                'organization' => 'Signet Cloud KMS',
-            ]
-        ]);
+        $hsmResponse = $this->hsmService->generateProductIdentity($data['name']);
 
-        if (!$hsmResponse || !isset($hsmResponse['data']['wrapped_private_key']) || !isset($hsmResponse['data']['certificate'])) {
-            Log::error('[HSM PARSE ERROR] Invalid or incomplete JSON structure from Hardware.', [
+        if (!$hsmResponse || !isset($hsmResponse['wrapped_private_key']) || !isset($hsmResponse['certificate'])) {
+            Log::error('[HSM PARSE ERROR] Invalid or incomplete response from HsmService.', [
                 'product_name' => $data['name'],
             ]);
             throw new Exception('Hardware Security Error: HSM failed to respond or format is invalid.');
@@ -40,11 +33,11 @@ class ProductService
             'name' => $data['name'],
             'slug' => Str::slug($data['name']) . '-' . Str::random(5),
             'description' => $data['description'] ?? null,
-            'wrapped_private_key' => $hsmResponse['data']['wrapped_private_key'],
-            'certificate' => $hsmResponse['data']['certificate'],
+            'wrapped_private_key' => $hsmResponse['wrapped_private_key'],
+            'certificate' => $hsmResponse['certificate'],
         ]);
 
-        Log::info('[DB SUCCESS] Product and keys securely generated and saved for: ' . $data['name']);
+        Log::info('[DB SUCCESS] Product and keys securely generated for: ' . $data['name']);
 
         return $product;
     }

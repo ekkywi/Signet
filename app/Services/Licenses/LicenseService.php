@@ -5,7 +5,6 @@ namespace App\Services\Licenses;
 use App\Models\License;
 use App\Models\Workspace;
 use App\Models\LicenseActivation;
-use Illuminate\Support\Str;
 
 class LicenseService
 {
