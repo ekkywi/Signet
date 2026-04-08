@@ -46,10 +46,10 @@ services:
     privileged: false
     cap_add:
       - SYS_RAWIO
-    devices:
-      - "/dev/ttyACM0:/dev/ttyACM0"
+    # devices:
+    #   - "/dev/ttyACM0:/dev/ttyACM0"
     environment:
-      - SERIAL_PORT=/dev/ttyACM0
+      # - SERIAL_PORT=/dev/ttyACM0
       - NODE_ENV=production
     networks:
       - internal
@@ -72,9 +72,11 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - "127.0.0.1:5434:5432"
+      # - "127.0.0.1:5434:5432"
+      - "5434:5432"
     networks:
       - internal
+      - public # Allow external access for development
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
       interval: 10s

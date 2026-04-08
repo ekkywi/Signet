@@ -17,6 +17,8 @@ return new class extends Migration
             $table->boolean('require_hardware_lock')->default(true);
             $table->integer('max_activations')->default(1);
             $table->timestamp('expires_at')->nullable();
+            $table->text('signature')->nullable();
+            $table->text('signed_payload')->nullable();
             $table->timestamps();
         });
     }
