@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Pages\HomeController;
-use App\Http\Controllers\Pages\DashboardController;
+use App\Http\Controllers\Pages\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -12,8 +12,13 @@ use App\Http\Controllers\Pages\ApiKeyController;
 use App\Http\Controllers\Pages\ProductController;
 use App\Http\Controllers\Pages\LicenseController;
 use App\Http\Controllers\Pages\OfflineLicenseController;
-use App\Http\Controllers\Pages\AuditLogController;
+use App\Http\Controllers\Pages\AuditLogController as TenantAuditLogController;
 use App\Http\Controllers\Pages\ProfileController;
+
+// Admin Controllers
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\HsmController;
+use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,13 +72,31 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 4. PROTECTED SYSTEM ROUTES (Must be logged in AND email verified to access)
+| 4. ADMIN ROUTES (Only for users with 'super-admin' role)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])->group(function () {
+
+    // Admin Dashboard
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // HSM Status
+    Route::get('/hsm-status', [HsmController::class, 'index'])->name('hsm.index');
+
+    // Audit Logs
+    Route::get('/audit-logs', [AdminAuditLogController::class, 'index'])->name('logs.index');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| 5. PROTECTED SYSTEM ROUTES (Must be logged in AND email verified to access)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [TenantDashboardController::class, 'index'])->name('dashboard');
 
     // API Keys Management
     Route::get('/api-keys', [ApiKeyController::class, 'index'])->name('apikeys.index');
@@ -99,7 +122,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/offline-licenses', [OfflineLicenseController::class, 'store'])->name('offline-licenses.store');
 
     // Audit Logs
-    Route::get('/logs', [AuditLogController::class, 'index'])->name('logs.index');
+    Route::get('/logs', [TenantAuditLogController::class, 'index'])->name('logs.index');
 
     // API Documentation (Internal)
     Route::get('/docs', function () {

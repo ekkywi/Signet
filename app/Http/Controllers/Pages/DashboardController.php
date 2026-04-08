@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\LicenseActivation;
 
@@ -13,7 +12,17 @@ class DashboardController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+
+        if ($user->hasRole('super-admin')) {
+            return redirect('/admin/dashboard');
+        }
+
         $workspace = $user->workspaces()->first();
+
+        if (!$workspace) {
+            abort(404, 'No workspace found. Please create a workspace to access the dashboard.');
+        }
+
         $totalProducts = $workspace->products()->count();
         $totalLicenses = $workspace->licenses()->count();
         $totalDevices = LicenseActivation::whereHas('license', function ($query) use ($workspace) {

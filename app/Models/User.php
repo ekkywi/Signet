@@ -37,6 +37,26 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Workspace::class);
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasROle(string|array $roles): bool
+    {
+        if (is_array($roles)) {
+            return $this->roles->whereIn('slug', $roles)->isNotEmpty();
+        }
+
+        return $this->roles->where('slug', $roles)->isNotEmpty();
+    }
+
+    public function assignRole(string $roleSlug): void
+    {
+        $role = Role::where('slug', $roleSlug)->firstOrFail();
+        $this->roles()->syncWithoutDetaching($role->id);
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new \App\Notifications\CustomResetPasswordNotification($token));

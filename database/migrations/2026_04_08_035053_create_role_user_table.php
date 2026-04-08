@@ -8,17 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('workspaces', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->foreignUuid('role_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->string('name');
-            $table->foreignUuid('subscription_plan_id')->constrained('subscription_plans');
-            $table->timestamps();
+            $table->primary(['role_id', 'user_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('workspaces');
+        Schema::dropIfExists('role_user');
     }
 };
