@@ -54,7 +54,7 @@ class SignetMasterSeeder extends Seeder
             ['email' => 'admin@signet.local'],
             [
                 'name' => 'Signet Administrator',
-                'password' => Hash::make('SecureAdminPassword123!'),
+                'password' => Hash::make('AdminPassword!123'),
             ]
         );
 

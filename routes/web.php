@@ -81,7 +81,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // HSM Status
-    Route::get('/hsm-status', [HsmController::class, 'index'])->name('hsm.index');
+    Route::prefix('hsm')->name('hsm.')->group(function () {
+        Route::get('/', [HsmController::class, 'index'])->name('index');
+        Route::post('/store', [HsmController::class, 'store'])->name('store');
+    });
 
     // Audit Logs
     Route::get('/audit-logs', [AdminAuditLogController::class, 'index'])->name('logs.index');

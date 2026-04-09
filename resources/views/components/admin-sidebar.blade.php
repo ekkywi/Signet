@@ -60,7 +60,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                     </svg>
-                    HSM Status
+                    HSM
                 </a>
 
                 <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors {{ request()->routeIs("admin.logs.*") ? "bg-red-500/10 text-red-400" : "text-gray-400 hover:text-white hover:bg-white/5" }}" href="{{ route("admin.logs.index") }}">
