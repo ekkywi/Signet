@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('temperature')->nullable();
             $table->timestamp('last_ping_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -31,7 +31,7 @@
                         <p class="text-xs text-emerald-500/80 mt-1">Run the following command on your host machine to enroll the HSM node:</p>
 
                         <div class="mt-4 bg-black/40 border border-gray-800 rounded-xl p-4 flex items-center justify-between group">
-                            <code class="text-gray-300 font-mono text-sm break-all">{{ session("enroll_command") }}</code>
+                            <code class="text-gray-300 font-mono text-sm break-all" id="ztpCommandText">{{ session("enroll_command") }}</code>
                             <button class="ml-4 text-xs font-bold text-emerald-400 hover:text-emerald-300 uppercase tracking-widest transition-colors" onclick="copyToClipboard('{{ session("enroll_command") }}')">
                                 Copy
                             </button>
@@ -88,6 +88,7 @@
                     </div>
 
                     <div class="border-t {{ $isOffline ? "border-red-900/30" : ($isBusy ? "border-orange-900/30" : "border-gray-800/60") }} bg-black/40 px-4 py-3 flex items-center justify-between">
+
                         <div class="flex gap-2">
                             <button {{ $isOffline ? "disabled" : "" }} class="p-2 rounded-lg transition-colors border border-transparent {{ $isOffline ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-white hover:bg-gray-800 hover:border-gray-700" }}" title="Ping Device">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,20 +106,39 @@
                                 </svg>
                             </button>
                         </div>
-                        @if ($isOffline)
-                            <button class="p-2 rounded-lg text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]" title="Power On">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                </svg>
-                            </button>
-                        @else
-                            <button class="p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors border border-transparent hover:border-red-500/30" title="Power Off">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                </svg>
-                            </button>
-                        @endif
+
+                        <div class="flex items-center gap-3">
+
+                            <div class="flex items-center gap-1 border-r border-gray-700/50 pr-3">
+                                <button class="p-2 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" onclick="openEditModal('{{ $node->id }}', '{{ $node->name }}', '{{ $node->host_path }}', '{{ $node->is_primary }}')" title="Edit Node">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg>
+                                </button>
+
+                                <button class="p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors" onclick="openDeleteModal('{{ $node->id }}', '{{ $node->name }}')" title="Delete Node" type="button">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            @if ($isOffline)
+                                <button class="p-2 rounded-lg text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]" title="Power On">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg>
+                                </button>
+                            @else
+                                <button class="p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors border border-transparent hover:border-red-500/30" title="Power Off">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg>
+                                </button>
+                            @endif
+                        </div>
                     </div>
+
                 </div>
             @empty
                 <div class="col-span-3 py-20 border-2 border-dashed border-gray-800 rounded-3xl flex flex-col items-center justify-center text-center">
@@ -155,8 +175,8 @@
 
     </div>
 
-    <div class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" id="registerNodeModal">
-        <div class="bg-[#111] border border-gray-800 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+    <div class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300" id="registerNodeModal">
+        <div class="bg-[#111] border border-gray-800 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="registerNodeModalContent">
             <div class="p-8">
                 <h3 class="text-xl font-bold text-white">Register HSM Node</h3>
                 <p class="text-sm text-gray-500 mt-1">Register your HSM hardware node to the system.</p>
@@ -165,11 +185,11 @@
                     @csrf
                     <div>
                         <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Node Name</label>
-                        <input class="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-red-500 outline-none transition-all" name="name" placeholder="E" required type="text">
+                        <input class="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-red-500 outline-none transition-all" name="name" placeholder="Example: NODE-01" required type="text">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">USB Host Path</label>
-                        <input class="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-red-500 outline-none transition-all font-mono text-sm" name="host_path" placeholder="Contoh: /dev/ttyUSB0" required type="text" value="/dev/ttyUSB0">
+                        <input class="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-red-500 outline-none transition-all font-mono text-sm" name="host_path" placeholder="Example: /dev/ttyUSB0" required type="text" value="/dev/ttyUSB0">
                     </div>
 
                     <div class="flex gap-3 pt-4">
@@ -185,19 +205,195 @@
         </div>
     </div>
 
+    <div class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 bg-[#111] border rounded-xl px-5 py-4 pointer-events-none shadow-2xl" id="toastNotification">
+        <div id="toastIconWrapper"></div>
+        <span class="text-sm font-medium text-white" id="toastMessage"></span>
+    </div>
+
+    <div class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300" id="editNodeModal">
+        <div class="bg-[#111] border border-gray-800 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="editNodeModalContent">
+            <div class="p-8">
+                <h3 class="text-xl font-bold text-white">Edit HSM Node</h3>
+                <p class="text-sm text-gray-500 mt-1">Update your HSM node configuration.</p>
+
+                <form action="" class="mt-8 space-y-6" id="editNodeForm" method="POST">
+                    @csrf
+                    @method("PUT")
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Node Name</label>
+                        <input class="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-all" id="edit_name" name="name" required type="text">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">USB Host Path</label>
+                        <input class="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-all font-mono text-sm" id="edit_host_path" name="host_path" required type="text">
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <input class="w-4 h-4 text-blue-600 bg-black border-gray-800 rounded focus:ring-blue-500" id="edit_is_primary" name="is_primary" type="checkbox" value="1">
+                        <label class="text-sm font-medium text-gray-400" for="edit_is_primary">Set as Primary Node</label>
+                    </div>
+
+                    <div class="flex gap-3 pt-4">
+                        <button class="flex-1 px-4 py-3 rounded-xl border border-gray-800 text-gray-400 font-bold text-sm hover:bg-white/5 transition-all" onclick="closeModal('editNodeModal')" type="button">
+                            CANCEL
+                        </button>
+                        <button class="flex-1 px-4 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20" type="submit">
+                            UPDATE
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300" id="deleteNodeModal">
+        <div class="bg-[#111] border border-red-900/50 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="deleteNodeModalContent">
+            <div class="p-8 text-center">
+                <div class="w-16 h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-5 border border-red-500/20">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Delete HSM Node?</h3>
+                <p class="text-sm text-gray-400">Are you sure you want to delete <span class="font-bold text-white uppercase px-2 py-0.5 bg-gray-800 rounded" id="delete_node_name"></span> permanently? This action cannot be undone.</p>
+
+                <form action="" class="mt-8 flex gap-3" id="deleteNodeForm" method="POST">
+                    @csrf
+                    @method("DELETE")
+                    <button class="flex-1 px-4 py-3 rounded-xl border border-gray-800 text-gray-400 font-bold text-sm hover:bg-white/5 transition-all" onclick="closeModal('deleteNodeModal')" type="button">
+                        CANCEL
+                    </button>
+                    <button class="flex-1 px-4 py-3 rounded-xl bg-red-600 text-white font-bold text-sm hover:bg-red-700 transition-all shadow-lg shadow-red-600/20" type="submit">
+                        YES, DELETE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
+            const modal = document.getElementById(id);
+            const content = document.getElementById(id + 'Content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
         }
 
         function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
+            const modal = document.getElementById(id);
+            const content = document.getElementById(id + 'Content');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
         }
 
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            // Optional: Tambahkan library toast/alert yang Anda gunakan di sini
-            alert('Perintah ZTP berhasil disalin!');
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('Command copied to clipboard!', 'success');
+                }).catch(err => {
+                    console.warn('Clipboard API failed, trying fallback...', err);
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
         }
+
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('Command copied to clipboard!', 'success');
+                } else {
+                    showToast('Failed to copy command.', 'error');
+                }
+            } catch (err) {
+                console.error('Fallback copy gagal', err);
+                showToast('Failed to copy command.', 'error');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // --- FUNGSI TOAST DINAMIS (SUCCESS & ERROR) ---
+        let toastTimer; // Variabel global agar animasi tidak tabrakan
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastNotification');
+            const messageEl = document.getElementById('toastMessage');
+            const iconWrapper = document.getElementById('toastIconWrapper');
+
+            // 1. Set Pesan
+            messageEl.textContent = message;
+
+            // 2. Reset Class & Icon
+            toast.className = "fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 bg-[#111] border rounded-xl px-5 py-4 pointer-events-none shadow-2xl";
+
+            if (type === 'success') {
+                toast.classList.add('border-emerald-500/30', 'shadow-emerald-500/10');
+                iconWrapper.innerHTML = `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>`;
+            } else if (type === 'error') {
+                toast.classList.add('border-red-500/30', 'shadow-red-500/10');
+                iconWrapper.innerHTML = `<svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            }
+
+            // 3. Tampilkan Toast
+            setTimeout(() => {
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+            }, 10);
+
+            // 4. Sembunyikan otomatis setelah 3.5 detik
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        // --- FUNGSI MODAL LAINNYA ---
+        function openEditModal(id, name, path, isPrimary) {
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_host_path').value = path;
+            document.getElementById('edit_is_primary').checked = (isPrimary == 1);
+            document.getElementById('editNodeForm').action = `/admin/hsm/${id}`;
+            openModal('editNodeModal');
+        }
+
+        function openDeleteModal(id, name) {
+            document.getElementById('delete_node_name').textContent = name;
+            document.getElementById('deleteNodeForm').action = `/admin/hsm/${id}`;
+            openModal('deleteNodeModal');
+        }
+
+        // --- OTOMATIS TAMPILKAN TOAST DARI LARAVEL SESSION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            @if (session("success"))
+                showToast("{!! addslashes(session("success")) !!}", 'success');
+            @endif
+
+            @if (session("error"))
+                showToast("{!! addslashes(session("error")) !!}", 'error');
+            @endif
+
+            @if ($errors->any())
+                showToast("{!! addslashes($errors->first()) !!}", 'error');
+            @endif
+        });
     </script>
 </x-layouts.admin>

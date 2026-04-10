@@ -84,6 +84,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])
     Route::prefix('hsm')->name('hsm.')->group(function () {
         Route::get('/', [HsmController::class, 'index'])->name('index');
         Route::post('/store', [HsmController::class, 'store'])->name('store');
+        Route::put('/{hsmNode}', [HsmController::class, 'update'])->name('update');
+        Route::delete('/{hsmNode}', [HsmController::class, 'destroy'])->name('destroy');
     });
 
     // Audit Logs

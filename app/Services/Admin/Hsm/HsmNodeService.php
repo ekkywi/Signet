@@ -46,4 +46,30 @@ class HsmNodeService
             'node_name' => $node->name,
         ];
     }
+
+    public function update(HsmNode $node, array $data): HsmNode
+    {
+        $node->update([
+            'name' => $data['name'],
+            'host_path' => $data['host_path'],
+            'is_primary' => isset($data['is_primary']),
+        ]);
+
+        return $node;
+    }
+
+    public function deleteNode(HsmNode $node): void
+    {
+        $originalName = $node->name;
+        $mutatedName = $originalName . ' [RVK-' . now()->format('ymdHi') . ']';
+        $node->update([
+            'name' => $mutatedName,
+            'status' => 'revoked',
+            'is_primary' => false,
+            'is_active' => false,
+            'secret_key' => 'revoked_' . Str::random(40),
+        ]);
+
+        $node->delete();
+    }
 }
