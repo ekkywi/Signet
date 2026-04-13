@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\HsmBridgeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\LicenseValidationController;
+use App\Http\Controllers\Api\Internal\HsmPingController;
 use App\Http\Middleware\VerifyApiKey;
 
 Route::get('/user', function (Request $request) {
@@ -23,3 +24,6 @@ Route::prefix('hsm')->group(function () {
     Route::post('/enroll', [HsmBridgeController::class, 'enroll']);
 });
 
+Route::prefix('internal/hsm')->middleware('verify.hsm.node')->group(function () {
+    Route::post('/ping', [HsmPingController::class, 'ping']);
+});

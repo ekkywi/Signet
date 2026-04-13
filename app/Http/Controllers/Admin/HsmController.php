@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreHsmNodeRequest;
 use App\Http\Requests\Admin\UpdateHsmNodeRequest;
 use App\Models\HsmNode;
 use App\Services\Admin\Hsm\HsmNodeService;
+use Illuminate\Http\Request;
 
 class HsmController extends Controller
 {
@@ -42,5 +43,12 @@ class HsmController extends Controller
         $this->hsmNodeService->deleteNode($hsmNode);
 
         return back()->with('success', "Node {$name} has been deleted permanently.");
+    }
+
+    public function sendCommand(Request $request, HsmNode $hsmNode)
+    {
+        $request->validate([
+            'command' => ['required', 'string']
+        ]);
     }
 }

@@ -330,18 +330,15 @@
             document.body.removeChild(textArea);
         }
 
-        // --- FUNGSI TOAST DINAMIS (SUCCESS & ERROR) ---
-        let toastTimer; // Variabel global agar animasi tidak tabrakan
+        let toastTimer;
 
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toastNotification');
             const messageEl = document.getElementById('toastMessage');
             const iconWrapper = document.getElementById('toastIconWrapper');
 
-            // 1. Set Pesan
             messageEl.textContent = message;
 
-            // 2. Reset Class & Icon
             toast.className = "fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 bg-[#111] border rounded-xl px-5 py-4 pointer-events-none shadow-2xl";
 
             if (type === 'success') {
@@ -352,13 +349,11 @@
                 iconWrapper.innerHTML = `<svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
             }
 
-            // 3. Tampilkan Toast
             setTimeout(() => {
                 toast.classList.remove('translate-y-20', 'opacity-0');
                 toast.classList.add('translate-y-0', 'opacity-100');
             }, 10);
 
-            // 4. Sembunyikan otomatis setelah 3.5 detik
             if (toastTimer) clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
@@ -366,7 +361,6 @@
             }, 3500);
         }
 
-        // --- FUNGSI MODAL LAINNYA ---
         function openEditModal(id, name, path, isPrimary) {
             document.getElementById('edit_name').value = name;
             document.getElementById('edit_host_path').value = path;
@@ -381,7 +375,6 @@
             openModal('deleteNodeModal');
         }
 
-        // --- OTOMATIS TAMPILKAN TOAST DARI LARAVEL SESSION ---
         document.addEventListener('DOMContentLoaded', () => {
             @if (session("success"))
                 showToast("{!! addslashes(session("success")) !!}", 'success');

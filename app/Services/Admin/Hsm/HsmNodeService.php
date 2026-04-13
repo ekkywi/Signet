@@ -72,4 +72,13 @@ class HsmNodeService
 
         $node->delete();
     }
+
+    public function processPing(HsmNode $node, ?int $temperature): void
+    {
+        $node->update([
+            'status' => 'online',
+            'last_ping_at' => now(),
+            'temperature' => $temperature,
+        ]);
+    }
 }
