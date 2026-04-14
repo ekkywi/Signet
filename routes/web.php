@@ -17,8 +17,10 @@ use App\Http\Controllers\Pages\ProfileController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\WorkspaceController;
 use App\Http\Controllers\Admin\HsmController;
 use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
+use App\Http\Controllers\Admin\ImpersonationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,10 +77,17 @@ Route::middleware('auth')->group(function () {
 | 4. ADMIN ROUTES (Only for users with 'super-admin' role)
 |--------------------------------------------------------------------------
 */
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::get('/impersonate/leave', [ImpersonationController::class, 'leave'])->name('impersonate.leave');
+});
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])->group(function () {
 
     // Admin Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Workspaces Management
+    Route::get('/workspaces', [WorkspaceController::class, 'index'])->name('workspaces.index');
 
     // HSM Status
     Route::prefix('hsm')->name('hsm.')->group(function () {
@@ -91,8 +100,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])
 
     // Audit Logs
     Route::get('/audit-logs', [AdminAuditLogController::class, 'index'])->name('logs.index');
-});
 
+    // Impersonation
+    Route::get('/impersonate/{user}', [ImpersonationController::class, 'impersonate'])->name('impersonate');
+});
 
 /*
 |--------------------------------------------------------------------------

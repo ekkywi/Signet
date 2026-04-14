@@ -13,6 +13,8 @@ class Workspace extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'subscription_plan_id',
+        'status',
     ];
 
     public function user()

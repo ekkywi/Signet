@@ -4,7 +4,7 @@ import http from "http";
 // ⚙️ KONFIGURASI SIMULATOR HSM (PASTIKAN 3 BARIS INI ADA)
 // ==========================================
 const SERVER_URL = "http://127.0.0.1:8888/api/internal/hsm/ping";
-const BEARER_TOKEN = "sk_hsm_haIaqyVL9rjOa175eyoDnLh1v58rlvxzfQtGhYih";
+const BEARER_TOKEN = "sk_hsm_FyMj7UnLiujFXAklvPKJfrnUFaZ4ZHcpk5h6OEkw";
 const PING_INTERVAL = 5000;
 
 console.log("=====================================");
