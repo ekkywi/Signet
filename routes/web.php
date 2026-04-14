@@ -86,6 +86,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])
         Route::post('/store', [HsmController::class, 'store'])->name('store');
         Route::put('/{hsmNode}', [HsmController::class, 'update'])->name('update');
         Route::delete('/{hsmNode}', [HsmController::class, 'destroy'])->name('destroy');
+        Route::post('{hsmNode}/command', [HsmController::class, 'sendCommand'])->name('send-command');
     });
 
     // Audit Logs

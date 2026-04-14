@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreHsmNodeRequest;
 use App\Http\Requests\Admin\UpdateHsmNodeRequest;
+use App\Http\Requests\Admin\SendCommandHsmNodeRequest;
 use App\Models\HsmNode;
 use App\Services\Admin\Hsm\HsmNodeService;
-use Illuminate\Http\Request;
 
 class HsmController extends Controller
 {
@@ -45,10 +45,13 @@ class HsmController extends Controller
         return back()->with('success', "Node {$name} has been deleted permanently.");
     }
 
-    public function sendCommand(Request $request, HsmNode $hsmNode)
+    public function sendCommand(SendCommandHsmNodeRequest $request, HsmNode $hsmNode)
     {
-        $request->validate([
-            'command' => ['required', 'string']
+        $hsmNode->commands()->create($request->validated());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Command '{$request->command}' successfully entered the post box queue."
         ]);
     }
 }

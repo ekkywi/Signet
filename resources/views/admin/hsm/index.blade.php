@@ -90,17 +90,19 @@
                     <div class="border-t {{ $isOffline ? "border-red-900/30" : ($isBusy ? "border-orange-900/30" : "border-gray-800/60") }} bg-black/40 px-4 py-3 flex items-center justify-between">
 
                         <div class="flex gap-2">
-                            <button {{ $isOffline ? "disabled" : "" }} class="p-2 rounded-lg transition-colors border border-transparent {{ $isOffline ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-white hover:bg-gray-800 hover:border-gray-700" }}" title="Ping Device">
+                            <button {{ $isOffline ? "disabled" : "" }} class="p-2 rounded-lg transition-colors border border-transparent {{ $isOffline ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-white hover:bg-gray-800 hover:border-gray-700" }}" onclick="triggerHsmCommand('{{ $node->id }}', '{{ $node->name }}', 'ping_test')" title="Ping Device">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                                 </svg>
                             </button>
-                            <button {{ $isOffline ? "disabled" : "" }} class="p-2 rounded-lg transition-colors border border-transparent {{ $isOffline ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/20" }}" title="Run Sign Check">
+
+                            <button {{ $isOffline ? "disabled" : "" }} class="p-2 rounded-lg transition-colors border border-transparent {{ $isOffline ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/20" }}" onclick="triggerHsmCommand('{{ $node->id }}', '{{ $node->name }}', 'sign_check')" title="Run Sign Check">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                                 </svg>
                             </button>
-                            <button {{ $isOffline ? "disabled" : "" }} class="p-2 rounded-lg transition-colors border {{ $isOffline ? "text-gray-700 border-transparent cursor-not-allowed" : ($isBusy ? "text-orange-400 bg-orange-500/10 border-orange-500/30 hover:bg-orange-500/20" : "text-gray-400 border-transparent hover:text-orange-400 hover:bg-orange-500/10 hover:border-orange-500/20") }}" title="Restart Node">
+
+                            <button {{ $isOffline ? "disabled" : "" }} class="p-2 rounded-lg transition-colors border {{ $isOffline ? "text-gray-700 border-transparent cursor-not-allowed" : ($isBusy ? "text-orange-400 bg-orange-500/10 border-orange-500/30 hover:bg-orange-500/20" : "text-gray-400 border-transparent hover:text-orange-400 hover:bg-orange-500/10 hover:border-orange-500/20") }}" onclick="triggerHsmCommand('{{ $node->id }}', '{{ $node->name }}', 'restart')" title="Restart Node">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                                 </svg>
@@ -108,14 +110,12 @@
                         </div>
 
                         <div class="flex items-center gap-3">
-
                             <div class="flex items-center gap-1 border-r border-gray-700/50 pr-3">
                                 <button class="p-2 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" onclick="openEditModal('{{ $node->id }}', '{{ $node->name }}', '{{ $node->host_path }}', '{{ $node->is_primary }}')" title="Edit Node">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                                     </svg>
                                 </button>
-
                                 <button class="p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors" onclick="openDeleteModal('{{ $node->id }}', '{{ $node->name }}')" title="Delete Node" type="button">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -124,13 +124,13 @@
                             </div>
 
                             @if ($isOffline)
-                                <button class="p-2 rounded-lg text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]" title="Power On">
+                                <button class="p-2 rounded-lg text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]" onclick="triggerHsmCommand('{{ $node->id }}', 'power_on')" title="Power On">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                                     </svg>
                                 </button>
                             @else
-                                <button class="p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors border border-transparent hover:border-red-500/30" title="Power Off">
+                                <button class="p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors border border-transparent hover:border-red-500/30" onclick="triggerHsmCommand('{{ $node->id }}', 'power_off')" title="Power Off">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                                     </svg>
@@ -272,6 +272,34 @@
         </div>
     </div>
 
+    <div class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300" id="commandConfirmModal">
+        <div class="bg-[#111] border border-orange-900/50 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="commandConfirmModalContent">
+            <div class="p-8 text-center">
+                <div class="w-16 h-16 rounded-full bg-orange-500/10 text-orange-500 flex items-center justify-center mx-auto mb-5 border border-orange-500/20">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Execute Remote Command?</h3>
+                <p class="text-sm text-gray-400">
+                    Queue <span class="font-bold text-white uppercase px-2 py-0.5 bg-gray-800 rounded mx-1" id="confirm_command_name"></span> command for
+                    <span class="font-bold text-white uppercase" id="confirm_node_name"></span>?
+                </p>
+                <p class="text-xs text-gray-500 mt-2">The hardware will fetch and execute this command on its next heartbeat.</p>
+
+                <div class="mt-8 flex gap-3">
+                    <button class="flex-1 px-4 py-3 rounded-xl border border-gray-800 text-gray-400 font-bold text-sm hover:bg-white/5 transition-all" onclick="closeModal('commandConfirmModal')" type="button">
+                        CANCEL
+                    </button>
+                    <button class="flex-1 px-4 py-3 rounded-xl bg-orange-600 text-white font-bold text-sm hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20 flex justify-center items-center" id="btnExecuteCommand" onclick="executeHsmCommand()" type="button">
+                        YES, EXECUTE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function openModal(id) {
             const modal = document.getElementById(id);
@@ -388,5 +416,67 @@
                 showToast("{!! addslashes($errors->first()) !!}", 'error');
             @endif
         });
+
+        let pendingCommandPayload = null;
+
+        function triggerHsmCommand(nodeId, nodeName, commandName) {
+            pendingCommandPayload = {
+                nodeId,
+                commandName
+            };
+
+            document.getElementById('confirm_command_name').textContent = commandName.replace('_', ' ');
+            document.getElementById('confirm_node_name').textContent = nodeName;
+
+            const btn = document.getElementById('btnExecuteCommand');
+            btn.innerHTML = 'YES, EXECUTE';
+            btn.disabled = false;
+
+            openModal('commandConfirmModal');
+        }
+
+        function executeHsmCommand() {
+            if (!pendingCommandPayload) return;
+
+            const {
+                nodeId,
+                commandName
+            } = pendingCommandPayload;
+            const btn = document.getElementById('btnExecuteCommand');
+
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mx-auto text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+            btn.disabled = true;
+
+            fetch(`/admin/hsm/${nodeId}/command`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        command: commandName
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    closeModal('commandConfirmModal');
+                    setTimeout(() => {
+                        if (data.status === 'success' || data.message) {
+                            showToast(data.message || `Command queued successfully.`, 'success');
+                        } else {
+                            showToast('Failed to queue command.', 'error');
+                        }
+                    }, 300);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    closeModal('commandConfirmModal');
+                    showToast('Server connection failed.', 'error');
+                })
+                .finally(() => {
+                    pendingCommandPayload = null;
+                });
+        }
     </script>
 </x-layouts.admin>

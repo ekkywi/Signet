@@ -33,6 +33,11 @@ class HsmNode extends Model
         'is_primary' => 'boolean',
         'is_active' => 'boolean',
         'last_ping_at' => 'datetime',
-        'enrollement_expires_at' => 'datetime',
+        'enrollment_expires_at' => 'datetime',
     ];
+
+    public function commands()
+    {
+        return $this->hasMany(HsmCommand::class, 'hsm_node_id');
+    }
 }

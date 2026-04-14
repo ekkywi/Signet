@@ -22,10 +22,23 @@ class HsmPingController extends Controller
 
         $this->hsmNodeService->processPing($node, $request->temperature);
 
-        return response()->json([
+        $pendingCommand = $node->commands()->where('status', 'pending')->oldest()->first();
+
+        $responseData = [
             'status' => 'success',
             'message' => 'Pong',
             'server_time' => now()->toIso8601String(),
-        ], 200);
+        ];
+
+        if ($pendingCommand) {
+            $responseData['action'] = $pendingCommand->command;
+            $responseData['command_id'] = $pendingCommand->id;
+
+            $pendingCommand->update([
+                'status' => 'sent'
+            ]);
+        }
+
+        return response()->json($responseData, 200);
     }
 }
