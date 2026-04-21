@@ -1,5 +1,5 @@
 # ─── Stage 1: Base (shared dependencies) ────
-FROM php:8.4-cli AS base
+FROM php:8.4-cli-bookworm AS base
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev supervisor curl \
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=mlocati/php-extension-installer \
     /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions pdo_pgsql pcntl bcmath gd sockets redis swoole
+RUN install-php-extensions pdo_pgsql pcntl bcmath gd sockets redis swoole opcache
 
 RUN usermod -a -G dialout www-data
 
@@ -54,9 +54,10 @@ RUN composer install \
     --prefer-dist
 
 COPY . .
+
 RUN composer dump-autoload --optimize \
     && chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 USER www-data
 

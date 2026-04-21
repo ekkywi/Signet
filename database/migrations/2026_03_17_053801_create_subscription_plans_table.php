@@ -11,10 +11,11 @@ return new class extends Migration
         Schema::create('subscription_plans', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->bigInteger('monthly_api_limit')->default(100);
+            $table->integer('max_products')->default(5);
+            $table->integer('max_licenses')->default(50);
             $table->string('slug')->unique();
             $table->decimal('price_monthly', 10, 2)->default(0.00);
-            $table->integer('max_products')->default(1);
-            $table->integer('max_licenses')->default(10);
             $table->boolean('has_api_access')->default(false);
             $table->timestamps();
         });

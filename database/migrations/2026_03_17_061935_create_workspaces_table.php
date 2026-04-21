@@ -13,7 +13,9 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->foreignUuid('subscription_plan_id')->constrained('subscription_plans');
+            $table->bigInteger('api_usage_count')->default(0);
             $table->enum('status', ['active', 'suspended', 'trial'])->default('active');
+            $table->text('suspension_reason')->nullable();
             $table->timestamps();
         });
     }

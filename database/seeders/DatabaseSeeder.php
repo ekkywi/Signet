@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SignetMasterSeeder::class,
+            SubscriptionPlanSeeder::class,
         ]);
     }
 }

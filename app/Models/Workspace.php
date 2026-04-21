@@ -14,7 +14,9 @@ class Workspace extends Model
         'user_id',
         'name',
         'subscription_plan_id',
+        'api_usage_count',
         'status',
+        'suspension_reason',
     ];
 
     public function user()
@@ -35,5 +37,10 @@ class Workspace extends Model
     public function licenses()
     {
         return $this->hasMany(License::class);
+    }
+
+    public function subscriptionPlan()
+    {
+        return $this->belongsTo(SubscriptionPlan::class);
     }
 }

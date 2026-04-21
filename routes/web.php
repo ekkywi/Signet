@@ -88,6 +88,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])
 
     // Workspaces Management
     Route::get('/workspaces', [WorkspaceController::class, 'index'])->name('workspaces.index');
+    Route::get('/workspaces/{workspace}', [WorkspaceController::class, 'show'])->name('workspaces.show');
+    Route::patch('/workspaces/{workspace}/change-plan', [WorkspaceController::class, 'changePlan'])->name('workspaces.change-plan');
+    Route::post('/workspaces/{workspace}/toggle-status', [WorkspaceController::class, 'toggleStatus'])->name('workspaces.toggle-status');
 
     // HSM Status
     Route::prefix('hsm')->name('hsm.')->group(function () {
