@@ -44,20 +44,51 @@ trait Auditable
 
     public static function logAction($model, string $action)
     {
-        /** @var \App\Models\User|null $user */
+        if (!$model) return;
+
+        /** @var \App\Models\User|null */
         $user = Auth::user();
 
         $oldData = $action !== 'created' ? $model->getOriginal() : null;
         $newData = $action !== 'deleted' ? $model->getAttributes() : null;
 
+        $workspaceId = null;
+
+        if (!empty($model->workspace_id)) {
+            $workspaceId = $model->workspace_id;
+        } elseif (class_basename($model) === 'Workspace') {
+            if (isset($model->id)) {
+                $workspaceId = $model->id;
+            }
+        } elseif ($user && method_exists($user, 'workspaces')) {
+            $firstWorkspace = $user->workspaces()->first();
+            if ($firstWorkspace && isset($firstWorkspace->id)) {
+                $workspaceId = $firstWorkspace->id;
+            }
+        }
+
+        $isSystemAction = false;
+
+        if ($user) {
+            if (method_exists($user, 'hasRole')) {
+                $isSystemAction = $user->hasRole('super-admin') || $user->hasRole('super_admin');
+            } elseif (method_exists($user, 'roles')) {
+                $isSystemAction = $user->roles()->whereIn('name', ['super-admin', 'super_admin'])->exists();
+            }
+        }
+
+        $userId = $user && isset($user->id) ? $user->id : null;
+        $auditableId = isset($model->id) ? $model->id : null;
+
         AuditLog::create([
-            'workspace_id' => $model->workspace_id ?? ($user ? $user->workspaces()->first()->id : null),
-            'user_id' => $user ? $user->id : null,
-            'action' => $action,
-            'auditable_type' => get_class($model),
-            'auditable_id' => $model->id,
-            'old_data' => self::markSensitiveData($oldData),
-            'new_data' => self::markSensitiveData($newData),
+            'workspace_id'      => $workspaceId,
+            'user_id'           => $userId,
+            'is_system_action'  => $isSystemAction,
+            'action'            => $action,
+            'auditable_type'    => get_class($model),
+            'auditable_id'      => $auditableId,
+            'old_data'          => self::markSensitiveData($oldData),
+            'new_data'          => self::markSensitiveData($newData),
         ]);
     }
 }

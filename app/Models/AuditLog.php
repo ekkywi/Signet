@@ -10,9 +10,21 @@ class AuditLog extends Model
 {
     use HasUuids;
 
+    protected $fillable = [
+        'workspace_id',
+        'user_id',
+        'is_system_action',
+        'action',
+        'auditable_type',
+        'auditable_id',
+        'old_data',
+        'new_data',
+    ];
+
     protected $guarded = [];
 
     protected $casts = [
+        'is_system_action' => 'boolean',
         'old_data' => 'array',
         'new_data' => 'array',
     ];
@@ -35,13 +47,16 @@ class AuditLog extends Model
                     return $this->auditable->name ?? $this->auditable->key ?? null;
                 }
 
+                if ($this->new_data) {
+                    return $this->new_data['name'] ?? $this->new_data['key'] ?? null;
+                }
+
                 if ($this->old_data) {
                     return $this->old_data['name'] ?? $this->old_data['key'] ?? null;
                 }
 
                 if ($this->action === 'login' || $this->action === 'logout') {
-                    $user = \App\Models\User::find($this->auditable_id);
-                    return $user ? $user->name : 'Unknown User';
+                    return $this->user ? $this->user->name : 'Unknown User';
                 }
 
                 return 'Unknown';

@@ -25,9 +25,9 @@ class HsmPingController extends Controller
         $pendingCommand = $node->commands()->where('status', 'pending')->oldest()->first();
 
         $responseData = [
-            'status' => 'success',
-            'message' => 'Pong',
-            'server_time' => now()->toIso8601String(),
+            'status'        => 'success',
+            'message'       => 'Pong',
+            'server_time'   => now()->toIso8601String(),
         ];
 
         if ($pendingCommand) {

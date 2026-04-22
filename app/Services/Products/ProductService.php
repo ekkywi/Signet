@@ -22,22 +22,24 @@ class ProductService
     {
         $hsmResponse = $this->hsmService->generateProductIdentity($data['name']);
 
-        if (!$hsmResponse || !isset($hsmResponse['wrapped_private_key']) || !isset($hsmResponse['certificate'])) {
-            Log::error('[HSM PARSE ERROR] Invalid or incomplete response from HsmService.', [
+        if (!$hsmResponse || !isset($hsmResponse['wrapped_private_key']) || !isset($hsmResponse['iv']) || !isset($hsmResponse['auth_tag'])) {
+            Log::error('[HSM PARSE ERROR] Invalid or incomplete response from HsmService. Missing Cryptography Parameters.', [
                 'product_name' => $data['name'],
             ]);
-            throw new Exception('Hardware Security Error: HSM failed to respond or format is invalid.');
+            throw new Exception('Hardware Security Error: HSM failed to respond or format is invalid (Missing IV/Tag).');
         }
 
         $product = $workspace->products()->create([
             'name' => $data['name'],
             'slug' => Str::slug($data['name']) . '-' . Str::random(5),
             'description' => $data['description'] ?? null,
+            'iv' => $hsmResponse['iv'],
+            'auth_tag' => $hsmResponse['auth_tag'],
             'wrapped_private_key' => $hsmResponse['wrapped_private_key'],
             'certificate' => $hsmResponse['certificate'],
         ]);
 
-        Log::info('[DB SUCCESS] Product and keys securely generated for: ' . $data['name']);
+        Log::info('[DB SUCCESS] Product and Zero-Trust keys securely generated for: ' . $data['name']);
 
         return $product;
     }

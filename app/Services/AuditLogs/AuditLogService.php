@@ -10,6 +10,7 @@ class AuditLogService
     public function getLogsPaginated(Workspace $workspace, string $startDate, string $endDate)
     {
         return AuditLog::where('workspace_id', $workspace->id)
+            ->where('is_system_action', false)
             ->whereDate('created_at', '>=', $startDate)
             ->whereDate('created_at', '<=', $endDate)
             ->with(['auditable', 'user'])
@@ -24,6 +25,7 @@ class AuditLogService
     public function exportCsv(Workspace $workspace, string $startDate, string $endDate)
     {
         $logs = AuditLog::where('workspace_id', $workspace->id)
+            ->where('is_system_action', false)
             ->whereDate('created_at', '>=', $startDate)
             ->whereDate('created_at', '<=', $endDate)
             ->with('auditable', 'user')

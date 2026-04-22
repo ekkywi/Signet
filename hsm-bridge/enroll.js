@@ -18,7 +18,7 @@ async function enrollNode() {
 
     const secretKey = response.data.secret_key;
     const nodeName = response.data.node_name;
-    const envContent = `HSM_NODE_NAME=${secretKey}\nHSM_NODE_NAME=${nodeName}\nAPI_BASE_URL=${API_BASE_URL}\n`;
+    const envContent = `HSM_SECRET_KEY=${secretKey}\nHSM_NODE_NAME=${nodeName}\nAPI_BASE_URL=${API_BASE_URL}\n`;
     fs.writeFileSync(".env", envContent);
 
     console.log(`Success! Node [${nodeName}] enrolled successfully.`);

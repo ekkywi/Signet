@@ -130,10 +130,16 @@ app.post("/api/hsm/generate", (req, res) => {
 app.post("/api/hsm/sign", (req, res) => {
   if (!isPortOpen) return res.status(503).json({ status: "offline" });
 
-  if (!req.body.wrapped_private_key || !req.body.payload) {
+  if (
+    !req.body.wrapped_private_key ||
+    !req.body.payload ||
+    !req.body.iv ||
+    !req.body.auth_tag
+  ) {
     return res.status(400).json({
       status: "error",
-      message: "Missing wrapped_private_key or payload",
+      message:
+        "Missing cryptography parameters (wrapped_key, payload, iv, or auth_tag",
     });
   }
 
@@ -141,6 +147,8 @@ app.post("/api/hsm/sign", (req, res) => {
     cmd: "SIGN_DATA",
     data: {
       wrapped_private_key: req.body.wrapped_private_key,
+      iv: req.body.iv,
+      auth_tag: req.body.auth_tag,
       payload: req.body.payload,
     },
   };

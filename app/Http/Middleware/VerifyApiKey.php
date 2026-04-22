@@ -15,8 +15,8 @@ class VerifyApiKey
 
         if (!$token) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized: API key is invalid or missing.'
+                'status'    => 'error',
+                'message'   => 'Unauthorized: API key is invalid or missing.'
             ], 401);
         }
 
@@ -24,8 +24,8 @@ class VerifyApiKey
 
         if (!$apiKey) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized: Invalid or revoked API key.'
+                'status'    => 'error',
+                'message'   => 'Unauthorized: Invalid or revoked API key.'
             ], 401);
         }
 

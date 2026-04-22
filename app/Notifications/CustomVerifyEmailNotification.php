@@ -14,8 +14,8 @@ class CustomVerifyEmailNotification extends BaseVerifyEmail
         return (new MailMessage)
             ->subject('Verify Your Email Address | Signet')
             ->view('emails.verify-email', [
-                'url' => $verificationUrl,
-                'user' => $notifiable,
+                'url'   => $verificationUrl,
+                'user'  => $notifiable,
             ]);
     }
 }

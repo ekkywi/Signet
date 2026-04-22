@@ -45,11 +45,11 @@ class OfflineLicenseService
         $expiresAt = $license->expires_at ? $license->expires_at->toIso8601String() : Carbon::now()->addYears(100)->toIso8601String();
 
         $payload = [
-            'expires_at' => $expiresAt,
-            'hardware_id' => $hardwareId,
-            'license_key' => $license->key,
-            'product' => $license->product->slug,
-            'timestamp' => now()->timestamp,
+            'expires_at'    => $expiresAt,
+            'hardware_id'   => $hardwareId,
+            'license_key'   => $license->key,
+            'product'       => $license->product->slug,
+            'timestamp'     => now()->timestamp,
         ];
 
         ksort($payload);
@@ -60,9 +60,9 @@ class OfflineLicenseService
 
         $signature = Cache::lock('hsm-usb-lock', 15)->block(15, function () use ($jsonPayloadString, $wrappedKey) {
 
-            $hsmResponse = $this->hsmService->signPayLoad([
-                'cmd' => 'SIGN_DATA',
-                'data' => [
+            $hsmResponse = $this->hsmService->signPayload([
+                'cmd'   => 'SIGN_DATA',
+                'data'  => [
                     'wrapped_private_key' => $wrappedKey,
                     'payload' => $jsonPayloadString
                 ]
@@ -82,8 +82,8 @@ class OfflineLicenseService
         $fileName = 'license_' . substr($hardwareId, 0, 8) . '.json';
 
         $licenseData = [
-            'status' => 'success',
-            'payload' => $payload,
+            'status'    => 'success',
+            'payload'   => $payload,
             'signature' => $signature,
         ];
 

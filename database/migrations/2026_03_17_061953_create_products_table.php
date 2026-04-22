@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->text('wrapped_private_key')->nullable();
+            $table->string('iv', 32)->nullable();
+            $table->string('auth_tag', 64)->nullable();
             $table->text('certificate')->nullable();
             $table->timestamps();
         });

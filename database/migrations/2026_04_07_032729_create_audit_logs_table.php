@@ -12,6 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('workspace_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignUuid('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->boolean('is_system_action')->default(false);
             $table->string('action');
             $table->uuidMorphs('auditable');
             $table->json('old_data')->nullable();

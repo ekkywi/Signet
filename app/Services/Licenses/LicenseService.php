@@ -27,27 +27,34 @@ class LicenseService
         $product = Product::findOrFail($data['product_id']);
 
         $payloadData = [
-            'serial' => $key,
-            'product' => $product->slug,
-            'expires' => $data['expires_at'] ?? 'never',
-            'hw_lock' => $data['require_hardware_lock'] ? 'yes' : 'no'
+            'serial'    => $key,
+            'product'   => $product->slug,
+            'expires'   => $data['expires_at'] ?? 'never',
+            'hw_lock'   => $data['require_hardware_lock'] ? 'yes' : 'no'
         ];
 
         ksort($payloadData);
 
         $payload = json_encode($payloadData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-        $signature = $this->hsmService->signLicense($product->wrapped_private_key, $payload);
+        $payloadHash = hash('sha256', $payload);
+
+        $signature = $this->hsmService->signLicense(
+            $product->wrapped_private_key,
+            $product->iv,
+            $product->auth_tag,
+            $payloadHash
+        );
 
         $license = $workspace->licenses()->create([
-            'product_id' => $product->id,
-            'key' => $key,
-            'status' => 'active',
+            'product_id'            => $product->id,
+            'key'                   => $key,
+            'status'                => 'active',
             'require_hardware_lock' => $data['require_hardware_lock'] ?? false,
-            'max_activations' => $data['max_activations'],
-            'expires_at' => $data['expires_at'],
-            'signature' => $signature,
-            'signed_payload' => $payload
+            'max_activations'       => $data['max_activations'],
+            'expires_at'            => $data['expires_at'],
+            'signature'             => $signature,
+            'signed_payload'        => $payload
         ]);
 
         return $license->loadCount('activations');

@@ -18,9 +18,9 @@ class HsmBridgeController extends Controller
         try {
             $result = $this->hsmNodeService->enrollNode($request->validated()['token']);
             return response()->json([
-                'message' => 'Enrollment successful.',
-                'secret_key' => $result['secret_key'],
-                'node_name' => $result['node_name']
+                'message'       => 'Enrollment successful.',
+                'secret_key'    => $result['secret_key'],
+                'node_name'     => $result['node_name']
             ]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);

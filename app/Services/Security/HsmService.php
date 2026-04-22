@@ -25,7 +25,9 @@ class HsmService
 
             return [
                 'wrapped_private_key' => $data['wrapped_private_key'],
-                'certificate'         => $data['certificate']
+                'iv'                  => $data['iv'] ?? null,
+                'auth_tag'            => $data['auth_tag'] ?? null,
+                'certificate'         => $data['certificate'] ?? null
             ];
         } catch (Exception $e) {
             Log::error("HSM Generation Failed: " . $e->getMessage());
@@ -34,11 +36,13 @@ class HsmService
         }
     }
 
-    public function signLicense(string $wrappedKey, string $payloadString): string
+    public function signLicense(string $wrappedKey, string $iv, string $authTag, string $payloadString): string
     {
         try {
             $response = Http::timeout(30)->post("{$this->baseUrl}/sign", [
                 'wrapped_private_key' => $wrappedKey,
+                'iv'                  => $iv,
+                'auth_tag'            => $authTag,
                 'payload'             => $payloadString
             ]);
 

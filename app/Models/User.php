@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Notifications\CustomResetPasswordNotification;
+use App\Notifications\CustomVerifyEmailNotification;
 use App\Traits\Auditable;
+use App\Models\Workspace;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -59,11 +62,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new \App\Notifications\CustomResetPasswordNotification($token));
+        $this->notify(new CustomResetPasswordNotification($token));
     }
 
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new \App\Notifications\CustomVerifyEmailNotification);
+        $this->notify(new CustomVerifyEmailNotification);
     }
 }

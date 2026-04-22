@@ -50,8 +50,8 @@ class HsmController extends Controller
         $hsmNode->commands()->create($request->validated());
 
         return response()->json([
-            'status' => 'success',
-            'message' => "Command '{$request->command}' successfully entered the post box queue."
+            'status'    => 'success',
+            'message'   => "Command '{$request->command}' successfully entered the post box queue."
         ]);
     }
 }
